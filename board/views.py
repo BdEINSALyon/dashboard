@@ -33,7 +33,7 @@ def update_computer(request):
                 computer = Computer.objects.get(status__name=name)
                 computer.name = name
             except Computer.DoesNotExist:
-                computer = Computer.objects.create(name=name)
+                computer = Computer(name=name)
         computer.status = status
         computer.save()
         return HttpResponse(status=200)
