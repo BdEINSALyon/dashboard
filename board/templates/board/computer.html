@@ -1,6 +1,6 @@
 {% extends 'board/base.html' %}
 {% block meta %}
-{#    <meta http-equiv="refresh" content="5;">#}
+    <meta http-equiv="refresh" content="60;">
 {% endblock meta %}
 
 {% block content %}
@@ -16,10 +16,10 @@
                         <div class="panel-body">
                             <ul>
                                 <li class="{% if status.imprimante_ma %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
-                                    Imprimante
+                                    Imprimante MA
                                 </li>
                                 <li class="{% if status.shutdown %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
-                                    Shutdown
+                                    Tâche d'extinction
                                 </li>
                                 <li>Logiciels :
                                     <ul>
