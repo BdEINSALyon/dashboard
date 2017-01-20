@@ -1,0 +1,53 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+    <h1>{% block title %}Salle IF{% endblock title %}</h1>
+    <div class="row">
+        {% for computer in computer_list %}
+            {% with status=computer.status %}
+                <div class="col-sm-4 col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ status.name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul>
+                                <li class="{% if status.imprimante_ma %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                    Imprimante
+                                </li>
+                                <li class="{% if status.shutdown %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                    Shutdown
+                                </li>
+                                <li>Logiciels :
+                                    <ul>
+                                        {% for app, installed in status.apps.items %}
+                                            <li class="{% if installed %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                                {{ app|title }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li>RAM
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                             aria-valuemin="0" aria-valuemax="100" style="width: {{computer.get_ram_percentage}}%;">
+                                            {{computer.get_ram_percentage}}%
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>Disque
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                             aria-valuemin="0" aria-valuemax="100" style="width: {{computer.get_disk_percentage}}%;">
+                                            {{computer.get_disk_percentage}}%
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+{% endblock content %}
