@@ -6,7 +6,7 @@ Dashboard pour monitorer les ordinateurs du BdE
 [![GNU GPL v3.0](http://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl.html)
 
 ```
-MARSU - Membership Application for Registration to Student Unions
+Dashboard - Monitor BdE's computers
 Copyright (C) 2017 Gabriel AUGENDRE
 Copyright (C) 2017 BdE INSA Lyon
 
