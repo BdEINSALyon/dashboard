@@ -6,10 +6,11 @@ from django.contrib.postgres.fields import JSONField
 
 class Computer(models.Model):
     status = JSONField()
+    name = models.CharField(max_length=100)
     last_update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.status.get('name', 'UNKNOWN')
+        return self.name
 
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')

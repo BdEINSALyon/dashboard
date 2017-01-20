@@ -11,7 +11,7 @@
                 <div class="col-sm-4 col-md-3">
                     <div class="panel panel-{% if computer.is_offline %}danger{% else %}success{% endif %}">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{ status.name }}</h3>
+                            <h3 class="panel-title">{{ computer.name }}</h3>
                         </div>
                         <div class="panel-body">
                             <ul>
@@ -45,6 +45,9 @@
                                             {{computer.get_disk_percentage}}%
                                         </div>
                                     </div>
+                                </li>
+                                <li>Dernier reporting
+                                    {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                 </li>
                             </ul>
                         </div>
