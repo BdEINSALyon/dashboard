@@ -1,4 +1,7 @@
 {% extends 'board/base.html' %}
+{% block meta %}
+{#    <meta http-equiv="refresh" content="5;">#}
+{% endblock meta %}
 
 {% block content %}
     <h1>{% block title %}Salle IF{% endblock title %}</h1>
@@ -6,7 +9,7 @@
         {% for computer in computer_list %}
             {% with status=computer.status %}
                 <div class="col-sm-4 col-md-3">
-                    <div class="panel panel-default">
+                    <div class="panel panel-{% if computer.is_offline %}danger{% else %}success{% endif %}">
                         <div class="panel-heading">
                             <h3 class="panel-title">{{ status.name }}</h3>
                         </div>

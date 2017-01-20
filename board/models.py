@@ -1,3 +1,5 @@
+import datetime
+from django.utils import timezone
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
@@ -11,8 +13,16 @@ class Computer(models.Model):
 
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')
-        return int((value.get('available') / value.get('total')) * 100)
+        total = int(value.get('total'))
+        available = int(value.get('available'))
+        return int(((total - available) / total) * 100)
 
     def get_disk_percentage(self):
         value = self.status.get('os').get('disk')
-        return int((value.get('available') / value.get('total')) * 100)
+        total = int(value.get('total'))
+        available = int(value.get('available'))
+        return int(((total - available) / total) * 100)
+
+    def is_offline(self):
+        return self.last_update + datetime.timedelta(minutes=30) < timezone.now()
+
