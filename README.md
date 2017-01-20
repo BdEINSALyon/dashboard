@@ -7,8 +7,8 @@ Dashboard pour monitorer les ordinateurs du BdE
 
 ```
 MARSU - Membership Application for Registration to Student Unions
-Copyright (C) 2016 Gabriel AUGENDRE
-Copyright (C) 2016 BdE INSA Lyon
+Copyright (C) 2017 Gabriel AUGENDRE
+Copyright (C) 2017 BdE INSA Lyon
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
