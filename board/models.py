@@ -27,3 +27,15 @@ class Computer(models.Model):
     def is_offline(self):
         return self.last_update + datetime.timedelta(minutes=30) < timezone.now()
 
+    def is_ok(self):
+        status = self.status
+        printer = status.get('imprimante_ma')
+        shutdown = status.get('shutdown')
+        apps = status.get('apps')
+
+        if apps:
+            office = apps.get('office')
+            return printer and shutdown and office
+        else:
+            return False
+

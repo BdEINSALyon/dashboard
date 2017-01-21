@@ -9,7 +9,7 @@
         {% for computer in computer_list %}
             {% with status=computer.status %}
                 <div class="col-sm-4 col-md-3">
-                    <div class="panel panel-{% if computer.is_offline %}danger{% else %}success{% endif %}">
+                    <div class="panel panel-{% if computer.is_ok %}success{% else %}danger{% endif %}">
                         <div class="panel-heading">
                             <h3 class="panel-title">{{ computer.name }}</h3>
                         </div>
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li>Dernier reporting
+                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
                                     {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                 </li>
                             </ul>
