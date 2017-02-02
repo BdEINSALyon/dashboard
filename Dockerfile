@@ -10,4 +10,12 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
+VOLUME /app/staticfiles
+
+ENV DATABASE_URL postgres://postgresql:postgresql@db:5432/dashboard
+
+EXPOSE 8000
+
+CMD /app/bash/run-prod.sh
+
 # RUN python manage.py compilemessages -l en -l fr
