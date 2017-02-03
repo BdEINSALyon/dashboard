@@ -1,7 +1,10 @@
 FROM alpine
 
-EXPOSE 8000
 RUN apk update
+
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
+    echo "Europe/Paris" >  /etc/timezone
 
 RUN apk add --no-cache python3 && \
     python3 -m ensurepip && \
@@ -25,8 +28,8 @@ ENV DATABASE_URL postgres://postgresql:postgresql@db:5432/dashboard
 
 EXPOSE 8000
 
-CMD /app/bash/run-prod.sh
-
 RUN chmod +x bash/run-prod.sh
+
+CMD /app/bash/run-prod.sh
 
 # RUN python manage.py compilemessages -l en -l fr
