@@ -12,7 +12,7 @@
                 <div class="col-sm-4 col-md-3">
                     <div class="panel panel-{% if computer.is_ok %}success{% else %}danger{% endif %}">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{ computer.name }}</h3>
+                            <h3 class="panel-title">{{ computer.name }}{% if status.description %} <small>{{ status.description }}{% endif %}</small></h3>
                         </div>
                         <div class="panel-body">
                             <ul>
