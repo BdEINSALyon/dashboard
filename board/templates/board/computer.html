@@ -23,7 +23,7 @@
                                 </li>
                                 <li>Logiciels :
                                     <ul>
-                                        {% for app, installed in status.apps.items %}
+                                        {% for app, installed in computer.get_sorted_apps %}
                                             <li class="{% if installed %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
                                                 {{ app|title }}
                                             </li>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             {% endwith %}
-            {% if forloop.counter|divisibleby:3 %}
+            {% if forloop.counter|divisibleby:4 %}
                 </div>
                 <div class="row">
             {% endif %}
