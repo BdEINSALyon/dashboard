@@ -47,11 +47,9 @@
                                         </div>
                                     </div>
                                 </li>
-                                {% timezone 'Europe/Paris' %}
-                                    <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
-                                        {{ computer.last_update|date:"SHORT_DATETIME_FORMAT"}}
-                                    </li>
-                                {% endtimezone %}
+                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
+                                    {{ computer.last_update|date:"SHORT_DATETIME_FORMAT"}}
+                                </li>
                             </ul>
                         </div>
                     </div>
