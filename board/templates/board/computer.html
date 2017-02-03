@@ -1,4 +1,5 @@
 {% extends 'board/base.html' %}
+{% load tz %}
 {% block meta %}
     <meta http-equiv="refresh" content="60;">
 {% endblock meta %}
@@ -46,9 +47,11 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
-                                    {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
-                                </li>
+                                {% timezone 'Europe/Paris' %}
+                                    <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
+                                        {{ computer.last_update|date:"SHORT_DATETIME_FORMAT"}}
+                                    </li>
+                                {% endtimezone %}
                             </ul>
                         </div>
                     </div>
