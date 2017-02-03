@@ -28,7 +28,7 @@ class Computer(models.Model):
         return int(((total - available) / total) * 100)
 
     def is_offline(self):
-        return self.last_update + datetime.timedelta(minutes=30) < timezone.now()
+        return self.last_update + datetime.timedelta(minutes=10) < timezone.now()
 
     def is_ok(self):
         status = self.status
