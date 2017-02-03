@@ -12,6 +12,9 @@ class Computer(models.Model):
     def __str__(self):
         return self.name
 
+    def get_sorted_apps(self):
+        return sorted(self.status.get('apps').items())
+
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')
         total = int(value.get('total'))
