@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from board import models
+
+
+@admin.register(models.Computer)
+class ComputerAdmin(admin.ModelAdmin):
+    pass
