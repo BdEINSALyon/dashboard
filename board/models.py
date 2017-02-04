@@ -16,6 +16,10 @@ class Computer(models.Model):
 
     def get_sorted_apps(self):
         apps = self.status.get('apps')
+
+        if not apps:
+            return []
+
         first = next(iter(apps.values()))
         if isinstance(first, dict):
             return OrderedDict(sorted(apps.items(), key=lambda app: app[1].get('name'))).items()
@@ -41,19 +45,20 @@ class Computer(models.Model):
         status = self.status
         printer = status.get('imprimante_ma')
         shutdown = status.get('shutdown')
+        activated = status.get('windows_activation')
         apps = status.get('apps')
 
-        if apps:
-            mandatory_apps = []
-            for name, app in apps.items():
-                if app.get('mandatory'):
-                    mandatory_apps.append(app)
-
-            mandatory_apps_ok = True
-            for app in mandatory_apps:
-                mandatory_apps_ok = mandatory_apps_ok and app.get('installed')
-
-            return printer and shutdown and mandatory_apps_ok
-        else:
+        if not (printer and shutdown and activated and apps):
             return False
+
+        mandatory_apps = []
+        for name, app in apps.items():
+            if app.get('mandatory'):
+                mandatory_apps.append(app)
+
+        mandatory_apps_ok = True
+        for app in mandatory_apps:
+            mandatory_apps_ok = mandatory_apps_ok and app.get('installed')
+
+        return mandatory_apps_ok
 

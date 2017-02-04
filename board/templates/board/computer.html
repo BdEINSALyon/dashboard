@@ -1,18 +1,44 @@
 {% extends 'board/base.html' %}
 {% load tz %}
+{% load static %}
 {% block meta %}
-    <meta http-equiv="refresh" content="60;">
+    {#    <meta http-equiv="refresh" content="60;">#}
 {% endblock meta %}
 
+{% block body-js %}
+    {{ block.super }}
+    <script src="{% static 'board/script.js' %}"></script>
+{% endblock body-js %}
+
 {% block content %}
-    <h1>{% block title %}Salle IF{% endblock title %}</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                {% block title %}Salle IF{% endblock title %}
+                <span class="pull-right hidden-xs btn-group">
+                    <button class="hide-ok switch btn btn-default">Montrer uniquement les problèmes.</button>
+                    <button class="show-ok switch btn btn-default">Montrer tous les postes.</button>
+                </span>
+            </h1>
+        </div>
+    </div>
+    <div class="visible-xs vertical-buttons">
+        <div class="row">
+            <div class="col-xs-12 btn-group-vertical">
+                <button class="hide-ok switch col-xs-12 btn btn-default">Montrer uniquement les problèmes.</button>
+                <button class="show-ok switch col-xs-12 btn btn-default">Montrer tous les postes.</button>
+            </div>
+        </div>
+    </div>
     <div class="row">
         {% for computer in computer_list %}
             {% with status=computer.status %}
                 <div class="col-sm-4 col-md-3">
                     <div class="panel panel-{% if computer.is_ok %}success{% else %}danger{% endif %}">
                         <div class="panel-heading">
-                            <h3 class="panel-title">{{ computer.name }}{% if status.description %} <small>{{ status.description }}{% endif %}</small></h3>
+                            <h3 class="panel-title">{{ computer.name }}{% if status.description %}
+                                <small>{{ status.description }}{% endif %}</small>
+                            </h3>
                         </div>
                         <div class="panel-body">
                             <ul>
@@ -21,6 +47,9 @@
                                 </li>
                                 <li class="{% if status.shutdown %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
                                     Tâche d'extinction
+                                </li>
+                                <li class="{% if status.windows_activation %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                    Activation de Windows
                                 </li>
                                 <li>Logiciels :
                                     <ul>
@@ -34,31 +63,30 @@
                                 <li>RAM
                                     <div class="progress">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: {{computer.get_ram_percentage}}%;">
-                                            {{computer.get_ram_percentage}}%
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: {{ computer.get_ram_percentage }}%;">
+                                            {{ computer.get_ram_percentage }}%
                                         </div>
                                     </div>
                                 </li>
                                 <li>Disque
                                     <div class="progress">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: {{computer.get_disk_percentage}}%;">
-                                            {{computer.get_disk_percentage}}%
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: {{ computer.get_disk_percentage }}%;">
+                                            {{ computer.get_disk_percentage }}%
                                         </div>
                                     </div>
                                 </li>
-                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">Dernier reporting
-                                    {{ computer.last_update|date:"SHORT_DATETIME_FORMAT"}}
+                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">
+                                    Dernier reporting
+                                    {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             {% endwith %}
-            {% if forloop.counter|divisibleby:4 %}
-                </div>
-                <div class="row">
-            {% endif %}
         {% endfor %}
     </div>
 {% endblock content %}
