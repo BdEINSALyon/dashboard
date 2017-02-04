@@ -44,8 +44,8 @@ class Computer(models.Model):
         apps = status.get('apps')
 
         if apps:
-            office = apps.get('office')
-            antivirus = apps.get('antivirus')
+            office = apps.get('office').get('installed')
+            antivirus = apps.get('antivirus').get('installed')
             return printer and shutdown and office and antivirus
         else:
             return False
