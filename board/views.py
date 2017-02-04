@@ -1,5 +1,7 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_exempt
 
@@ -19,6 +21,10 @@ class ComputerListView(ListView):
 
     def get_queryset(self):
         return Computer.objects.all().order_by('name')
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 @csrf_exempt

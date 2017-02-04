@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'board',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+LOGIN_URL = '/auth/oauth/microsoft/login'
