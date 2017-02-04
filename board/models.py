@@ -1,4 +1,6 @@
 import datetime
+from collections import OrderedDict
+
 from django.utils import timezone
 from django.db import models
 from django.contrib.postgres.fields import JSONField
@@ -13,7 +15,12 @@ class Computer(models.Model):
         return self.name
 
     def get_sorted_apps(self):
-        return sorted(self.status.get('apps').items())
+        apps = self.status.get('apps')
+        first = next(iter(apps.values()))
+        if isinstance(first, dict):
+            return OrderedDict(sorted(apps.items(), key=lambda app: app[1].get('name'))).items()
+        else:
+            return sorted(apps.items())
 
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')

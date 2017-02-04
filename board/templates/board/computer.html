@@ -24,9 +24,9 @@
                                 </li>
                                 <li>Logiciels :
                                     <ul>
-                                        {% for app, installed in computer.get_sorted_apps %}
-                                            <li class="{% if installed %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
-                                                {{ app|title }}
+                                        {% for name, app in computer.get_sorted_apps %}
+                                            <li class="{% if app.installed %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                                {% if app.name %}{{ app.name }}{% else %}{{ name|title }}{% endif %}
                                             </li>
                                         {% endfor %}
                                     </ul>
