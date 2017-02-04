@@ -44,9 +44,16 @@ class Computer(models.Model):
         apps = status.get('apps')
 
         if apps:
-            office = apps.get('office').get('installed')
-            antivirus = apps.get('antivirus').get('installed')
-            return printer and shutdown and office and antivirus
+            mandatory_apps = []
+            for name, app in apps.items():
+                if app.get('mandatory'):
+                    mandatory_apps.append(app)
+
+            mandatory_apps_ok = True
+            for app in mandatory_apps:
+                mandatory_apps_ok = mandatory_apps_ok and app.get('installed')
+
+            return printer and shutdown and mandatory_apps_ok
         else:
             return False
 
