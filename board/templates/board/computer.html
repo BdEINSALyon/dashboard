@@ -54,7 +54,10 @@
                                 <li>Logiciels :
                                     <ul>
                                         {% for _, app in computer.get_sorted_apps %}
-                                            <li class="{% if app.installed %}text-success bg-success{% elif app.mandatory %}text-danger bg-danger{% else %}text-warning bg-warning{% endif %}">
+                                            <li data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
+                                                class="{% if app.installed %}text-success bg-success{% elif app.mandatory %}text-danger bg-danger{% else %}text-warning bg-warning{% endif %}">
                                                 {{ app.name }}
                                             </li>
                                         {% endfor %}
