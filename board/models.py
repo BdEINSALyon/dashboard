@@ -41,6 +41,10 @@ class Computer(models.Model):
         else:
             return 'success'
 
+    @property
+    def total_ram(self):
+        return int(int(self.status.get('os').get('ram').get('total')) / 1024 / 1000)
+
     def get_disk_percentage(self):
         value = self.status.get('os').get('disk')
         total = int(value.get('total'))
@@ -55,6 +59,10 @@ class Computer(models.Model):
             return 'warning'
         else:
             return 'success'
+
+    @property
+    def total_disk(self):
+        return round(int(self.status.get('os').get('disk').get('total')) / 1000 / 1000 / 1000)
 
     def is_offline(self):
         return self.last_update + datetime.timedelta(minutes=10) < timezone.now()
