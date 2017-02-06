@@ -65,7 +65,7 @@
                                 </li>
                                 <li>RAM
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                        <div class="progress-bar progress-bar-{{ computer.get_ram_color }}" role="progressbar" aria-valuenow="60"
                                              aria-valuemin="0" aria-valuemax="100"
                                              style="width: {{ computer.get_ram_percentage }}%;">
                                             {{ computer.get_ram_percentage }}%
@@ -74,7 +74,7 @@
                                 </li>
                                 <li>Disque
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                        <div class="progress-bar progress-bar-{{ computer.get_disk_color }}" role="progressbar" aria-valuenow="60"
                                              aria-valuemin="0" aria-valuemax="100"
                                              style="width: {{ computer.get_disk_percentage }}%;">
                                             {{ computer.get_disk_percentage }}%

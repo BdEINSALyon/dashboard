@@ -32,11 +32,29 @@ class Computer(models.Model):
         available = int(value.get('available'))
         return int(((total - available) / total) * 100)
 
+    def get_ram_color(self):
+        percentage = self.get_ram_percentage()
+        if percentage >= 90:
+            return 'danger'
+        elif percentage >= 70:
+            return 'warning'
+        else:
+            return 'success'
+
     def get_disk_percentage(self):
         value = self.status.get('os').get('disk')
         total = int(value.get('total'))
         available = int(value.get('available'))
         return int(((total - available) / total) * 100)
+
+    def get_disk_color(self):
+        percentage = self.get_disk_percentage()
+        if percentage >= 90:
+            return 'danger'
+        elif percentage >= 70:
+            return 'warning'
+        else:
+            return 'success'
 
     def is_offline(self):
         return self.last_update + datetime.timedelta(minutes=10) < timezone.now()
