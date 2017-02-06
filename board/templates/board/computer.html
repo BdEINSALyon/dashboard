@@ -88,18 +88,26 @@
                                     {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                 </li>
 
-                                <li>
-                                    <a data-toggle="collapse" href="#session-{{ computer.name }}">Sessions verrouillées <span class="badge">{{ status.os.locked|length }}</span></a>
-                                    <div id="session-{{ computer.name }}" class="collapse">
-                                        <ul>
-                                            {% for username in status.os.locked %}
-                                                <li>
-                                                    {{ username }}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </li>
+                                {% with locked=status.os.locked %}
+                                    <li>
+                                        {% if locked %}
+                                            <a data-toggle="collapse" href="#session-{{ computer.name }}">
+                                        {% endif %}
+                                            <span class="badge">{{ locked|length }}</span> session{% if locked|length > 1 %}s{% endif %} verrouillée{% if locked|length > 1 %}s{% endif %}
+                                        {% if locked %}
+                                            </a>
+                                        {% endif %}
+                                        <div id="session-{{ computer.name }}" class="collapse">
+                                            <ul>
+                                                {% for username in status.os.locked %}
+                                                    <li>
+                                                        {{ username }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </li>
+                                {% endwith %}
                             </ul>
                         </div>
                     </div>
