@@ -26,6 +26,18 @@ class Computer(models.Model):
         else:
             return sorted(apps.items())
 
+    def get_sorted_tasks(self):
+        tasks = self.status.get('tasks')
+
+        if not tasks:
+            return []
+
+        first = next(iter(tasks.values()))
+        if isinstance(first, dict):
+            return OrderedDict(sorted(tasks.items(), key=lambda app: app[1].get('name'))).items()
+        else:
+            return sorted(tasks.items())
+
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')
         total = int(value.get('total'))
@@ -70,21 +82,24 @@ class Computer(models.Model):
     def is_ok(self):
         status = self.status
         printer = status.get('imprimante_ma')
-        shutdown = status.get('shutdown')
         activated = status.get('windows_activation')
         apps = status.get('apps')
+        tasks = status.get('tasks')
 
-        if not (printer and shutdown and activated and apps):
+        if not (printer and activated and apps and tasks):
             return False
 
-        mandatory_apps = []
-        for name, app in apps.items():
-            if app.get('mandatory'):
-                mandatory_apps.append(app)
+        return mandatory_is_ok(apps) and mandatory_is_ok(tasks)
 
-        mandatory_apps_ok = True
-        for app in mandatory_apps:
-            mandatory_apps_ok = mandatory_apps_ok and app.get('installed')
 
-        return mandatory_apps_ok
+def mandatory_is_ok(lst):
+    mandatory = []
+    for name, item in lst.items():
+        if item.get('mandatory'):
+            mandatory.append(item)
 
+    mandatory_ok = True
+    for item in mandatory:
+        mandatory_ok = mandatory_ok and item.get('installed')
+
+    return mandatory_ok

@@ -45,11 +45,20 @@
                                 <li class="{% if status.imprimante_ma %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
                                     Imprimante MA
                                 </li>
-                                <li class="{% if status.shutdown %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
-                                    Tâche d'extinction
-                                </li>
                                 <li class="{% if status.windows_activation %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
                                     Activation de Windows
+                                </li>
+                                <li>Tâches programmées :
+                                    <ul>
+                                        {% for _, task in computer.get_sorted_tasks %}
+                                            <li data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
+                                                class="{% if task.installed %}text-success bg-success{% elif task.mandatory %}text-danger bg-danger{% else %}text-warning bg-warning{% endif %}">
+                                                {{ task.name }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 </li>
                                 <li>Logiciels :
                                     <ul>
