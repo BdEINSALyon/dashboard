@@ -118,7 +118,8 @@ class Verif(models.Model):
     mandatory = models.BooleanField(default=True)
     type = models.ForeignKey(
         to=VerifType,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='verifs'
     )
 
     def __str__(self):
@@ -131,7 +132,8 @@ class VerifValue(models.Model):
     value = models.CharField(max_length=500)
     verif = models.ForeignKey(
         to=Verif,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='verifValues'
     )
 
     def __str__(self):

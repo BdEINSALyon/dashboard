@@ -12,7 +12,9 @@ RUN apk add --no-cache python3 && \
     pip3 install --upgrade pip setuptools && \
     rm -r /root/.cache
 
-RUN apk add python3-dev postgresql-dev gcc musl-dev
+RUN apk add --no-cache python3-dev postgresql-dev gcc musl-dev
+
+RUN apk add --no-cache openssl ca-certificates
 
 WORKDIR /app
 

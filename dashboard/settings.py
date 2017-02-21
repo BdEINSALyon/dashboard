@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'board',
     'account',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -138,5 +139,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+GRAPHENE = {
+    'SCHEMA': 'board.graphql.schema'
+}
+
 
 LOGIN_URL = '/auth/oauth/microsoft/login'
