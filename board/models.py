@@ -103,3 +103,39 @@ def mandatory_is_ok(lst):
         mandatory_ok = mandatory_ok and item.get('installed')
 
     return mandatory_ok
+
+
+class VerifType(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Verif(models.Model):
+    tag = models.CharField(max_length=100)
+    display_name = models.CharField(max_length=200)
+    mandatory = models.BooleanField(default=True)
+    type = models.ForeignKey(
+        to=VerifType,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return '{0}'.format(
+            self.display_name
+        )
+
+
+class VerifValue(models.Model):
+    value = models.CharField(max_length=500)
+    verif = models.ForeignKey(
+        to=Verif,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return '{0} - {1}'.format(
+            self.verif,
+            self.value
+        )
