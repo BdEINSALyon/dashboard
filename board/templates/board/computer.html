@@ -100,6 +100,13 @@
                                         </div>
                                     </div>
                                 </li>
+
+                                {% with prof=status.os.temp_profiles %}
+                                    <li class="text-{{ computer.get_temp_color }} bg-{{ computer.get_temp_color }}">
+                                        <span class="badge">{{ prof }}</span> profil{% if prof > 1 %}s{% endif %} temporaire{% if prof|length > 1 %}s{% endif %}
+                                    </li>
+                                {% endwith %}
+
                                 <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">
                                     Dernier reporting
                                     {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}

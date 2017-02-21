@@ -5,6 +5,9 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+DISK_DANGER = 90
+RAM_DANGER = 90
+TEMP_PROFILES_DANGER = 2
 
 class Computer(models.Model):
     status = JSONField()
@@ -46,7 +49,7 @@ class Computer(models.Model):
 
     def get_ram_color(self):
         percentage = self.get_ram_percentage()
-        if percentage >= 90:
+        if percentage >= RAM_DANGER:
             return 'danger'
         elif percentage >= 70:
             return 'warning'
@@ -65,9 +68,20 @@ class Computer(models.Model):
 
     def get_disk_color(self):
         percentage = self.get_disk_percentage()
-        if percentage >= 90:
+        if percentage >= DISK_DANGER:
             return 'danger'
         elif percentage >= 70:
+            return 'warning'
+        else:
+            return 'success'
+
+    def get_temp_color(self):
+        temp = self.status.get('os').get('temp_profiles')
+        if temp is None:
+            return ''
+        if temp >= TEMP_PROFILES_DANGER:
+            return 'danger'
+        elif temp >= 1:
             return 'warning'
         else:
             return 'success'
@@ -80,17 +94,24 @@ class Computer(models.Model):
         return self.last_update + datetime.timedelta(minutes=10) < timezone.now()
 
     def is_ok(self):
+        if self.get_ram_percentage() > RAM_DANGER:
+            return False
+
+        if self.get_disk_percentage() > DISK_DANGER:
+            return False
+
         status = self.status
         printer = status.get('imprimante_ma')
         activated = status.get('windows_activation')
         apps = status.get('apps')
         tasks = status.get('tasks')
         network = status.get('network')
+        temp = status.get('os').get('temp_profiles')
 
-        if not (printer and activated and apps and tasks and network):
+        if not (printer and activated and apps and tasks and network) or temp is None:
             return False
 
-        return network.get('dhcp') and mandatory_is_ok(apps) and mandatory_is_ok(tasks)
+        return network.get('dhcp') and temp < TEMP_PROFILES_DANGER and mandatory_is_ok(apps) and mandatory_is_ok(tasks)
 
 
 def mandatory_is_ok(lst):
