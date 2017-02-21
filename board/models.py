@@ -85,11 +85,12 @@ class Computer(models.Model):
         activated = status.get('windows_activation')
         apps = status.get('apps')
         tasks = status.get('tasks')
+        network = status.get('network')
 
-        if not (printer and activated and apps and tasks):
+        if not (printer and activated and apps and tasks and network):
             return False
 
-        return mandatory_is_ok(apps) and mandatory_is_ok(tasks)
+        return network.get('dhcp') and mandatory_is_ok(apps) and mandatory_is_ok(tasks)
 
 
 def mandatory_is_ok(lst):

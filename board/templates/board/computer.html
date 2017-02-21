@@ -72,6 +72,14 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
+                                {% if status.network %}
+                                    <li>Réseau :
+                                        <ul>
+                                            <li>Adresse IP : {{ status.network.ip }}</li>
+                                            <li class="{% if status.network.dhcp %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">DHCP activé</li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
                                 <li>RAM ({{ computer.total_ram }} Go)
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-{{ computer.get_ram_color }}"
