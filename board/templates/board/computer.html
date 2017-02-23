@@ -13,20 +13,22 @@
 {% block content %}
     <div class="row">
         <div class="col-md-12">
-            <h1>
+        <div class="d-flex justify-content-between my-3">
+            <div class="h1 d-inline m-0">
                 {% block title %}Salle IF{% endblock title %}
-                <span class="pull-right hidden-xs btn-group">
-                    <button class="hide-ok switch btn btn-default">Montrer uniquement les problèmes.</button>
-                    <button class="show-ok switch btn btn-default">Montrer tous les postes.</button>
-                </span>
-            </h1>
+            </div>
+            <div class="hidden-sm-down btn-group align-self-center">
+                <button class="hide-ok switch btn btn-secondary">Montrer uniquement les problèmes.</button>
+                <button class="show-ok switch btn btn-secondary">Montrer tous les postes.</button>
+            </div>
+        </div>
         </div>
     </div>
-    <div class="visible-xs vertical-buttons">
-        <div class="row">
-            <div class="col-xs-12 btn-group-vertical">
-                <button class="hide-ok switch col-xs-12 btn btn-default">Montrer uniquement les problèmes.</button>
-                <button class="show-ok switch col-xs-12 btn btn-default">Montrer tous les postes.</button>
+    <div class="row hidden-md-up mb-3">
+        <div class="col-sm-12">
+            <div class="">
+                <button class="hide-ok switch btn-block btn btn-secondary">Montrer uniquement les problèmes.</button>
+                <button class="show-ok switch btn-block btn btn-secondary">Montrer tous les postes.</button>
             </div>
         </div>
     </div>
@@ -34,39 +36,40 @@
         {% for computer in computer_list %}
             {% with status=computer.status %}
                 <div class="col-sm-4 col-md-3">
-                    <div class="panel panel-{% if computer.is_ok %}success{% else %}danger{% endif %}">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ computer.name }}{% if status.description %}
-                                <small>{{ status.description }}{% endif %}</small>
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <ul>
-                                <li class="{% if status.imprimante_ma %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                    <div class="mb-3 card card-outline-{{ computer.get_color }}">
+                        <h5 class="card-header card-inverse bg-{{ computer.get_color }}">
+                            {{ computer.name }}
+                            {% if status.description %}
+                                <small>{{ status.description }}</small>
+                            {% endif %}
+                        </h5>
+                        <div class="card-block">
+                            <ul class="list-unstyled mb-0">
+                                <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
                                     Imprimante MA
                                 </li>
-                                <li class="{% if status.windows_activation %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">
+                                <li class="text-white bg-{% if status.windows_activation %}success{% else %}danger{% endif %}">
                                     Activation de Windows
                                 </li>
                                 <li>Tâches programmées :
-                                    <ul>
+                                    <ul class="no-style">
                                         {% for _, task in computer.get_sorted_tasks %}
                                             <li data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
-                                                class="{% if task.installed %}text-success bg-success{% elif task.mandatory %}text-danger bg-danger{% else %}text-warning bg-warning{% endif %}">
+                                                class="text-white bg-{% if task.installed %}success{% elif task.mandatory %}danger{% else %}warning{% endif %}">
                                                 {{ task.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
                                 <li>Logiciels :
-                                    <ul>
+                                    <ul class="no-style">
                                         {% for _, app in computer.get_sorted_apps %}
                                             <li data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
-                                                class="{% if app.installed %}text-success bg-success{% elif app.mandatory %}text-danger bg-danger{% else %}text-warning bg-warning{% endif %}">
+                                                class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
                                                 {{ app.name }}
                                             </li>
                                         {% endfor %}
@@ -74,40 +77,44 @@
                                 </li>
                                 {% if status.network %}
                                     <li>Réseau :
-                                        <ul>
+                                        <ul class="no-style">
                                             <li>Adresse IP : {{ status.network.ip }}</li>
-                                            <li class="{% if status.network.dhcp %}text-success bg-success{% else %}text-danger bg-danger{% endif %}">DHCP activé</li>
+                                            <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
+                                                DHCP activé
+                                            </li>
                                         </ul>
                                     </li>
                                 {% endif %}
                                 <li>RAM ({{ computer.total_ram }} Go)
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-{{ computer.get_ram_color }}"
+                                        <div class="progress-bar bg-{{ computer.get_ram_color }}"
                                              role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
                                              aria-valuemin="0" aria-valuemax="100"
-                                             style="width: {{ computer.get_ram_percentage }}%; min-width: 10%;">
+                                             style="width: {{ computer.get_ram_percentage }}%;">
                                             {{ computer.get_ram_percentage }}%
                                         </div>
                                     </div>
                                 </li>
                                 <li>Disque dur C: ({{ computer.total_disk }} Go)
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-{{ computer.get_disk_color }}"
+                                        <div class="progress-bar bg-{{ computer.get_disk_color }}"
                                              role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
                                              aria-valuemin="0" aria-valuemax="100"
-                                             style="width: {{ computer.get_disk_percentage }}%; min-width: 10%;">
+                                             style="width: {{ computer.get_disk_percentage }}%;">
                                             {{ computer.get_disk_percentage }}%
                                         </div>
                                     </div>
                                 </li>
 
                                 {% with prof=status.os.temp_profiles %}
-                                    <li class="text-{{ computer.get_temp_color }} bg-{{ computer.get_temp_color }}">
-                                        <span class="badge">{{ prof }}</span> profil{% if prof > 1 %}s{% endif %} temporaire{% if prof|length > 1 %}s{% endif %}
+                                    <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
+                                        <span class="badge badge-pill badge-default">{{ prof }}</span>
+                                        profil{% if prof > 1 %}s{% endif %}
+                                        temporaire{% if prof|length > 1 %}s{% endif %}
                                     </li>
                                 {% endwith %}
 
-                                <li class="{% if computer.is_offline %}text-warning bg-warning{% else %}text-success bg-success{% endif %}">
+                                <li class="text-white bg-{% if computer.is_offline %}warning{% else %}success{% endif %}">
                                     Dernier reporting
                                     {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                 </li>
@@ -117,7 +124,9 @@
                                         {% if locked %}
                                             <a data-toggle="collapse" href="#session-{{ computer.name }}">
                                         {% endif %}
-                                            <span class="badge">{{ locked|length }}</span> session{% if locked|length > 1 %}s{% endif %} verrouillée{% if locked|length > 1 %}s{% endif %}
+                                            <span class="badge badge-pill badge-default">{{ locked|length }}</span>
+                                            session{% if locked|length > 1 %}s{% endif %}
+                                            verrouillée{% if locked|length > 1 %}s{% endif %}
                                         {% if locked %}
                                             </a>
                                         {% endif %}
@@ -142,5 +151,5 @@
                 <div class="row">
             {% endif %}
         {% endfor %}
-    </div>
+        </div>
 {% endblock content %}

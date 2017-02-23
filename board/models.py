@@ -113,6 +113,9 @@ class Computer(models.Model):
 
         return network.get('dhcp') and temp < TEMP_PROFILES_DANGER and mandatory_is_ok(apps) and mandatory_is_ok(tasks)
 
+    def get_color(self):
+        return 'success' if self.is_ok() else 'danger'
+
 
 def mandatory_is_ok(lst):
     mandatory = []
