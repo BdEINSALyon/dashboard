@@ -14,13 +14,8 @@ class ComputerListView(ListView):
     template_name = 'board/computer.html'
     context_object_name = 'computer_list'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        return context
-
     def get_queryset(self):
-        return Computer.objects.all().order_by('name')
+        return Computer.objects.order_by('name')
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):

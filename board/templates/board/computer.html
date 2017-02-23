@@ -26,23 +26,21 @@
     </div>
     <div class="row hidden-md-up mb-3">
         <div class="col-sm-12">
-            <div class="">
-                <button class="hide-ok switch btn-block btn btn-secondary">Montrer uniquement les problèmes.</button>
-                <button class="show-ok switch btn-block btn btn-secondary">Montrer tous les postes.</button>
-            </div>
+            <button class="hide-ok switch btn-block btn btn-secondary">Montrer uniquement les problèmes.</button>
+            <button class="show-ok switch btn-block btn btn-secondary">Montrer tous les postes.</button>
         </div>
     </div>
     <div class="row">
         {% for computer in computer_list %}
             {% with status=computer.status %}
-                <div class="col-sm-4 col-md-3">
+                <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="mb-3 card card-outline-{{ computer.get_color }}">
-                        <h5 class="card-header card-inverse bg-{{ computer.get_color }}">
+                        <h6 class="card-header card-inverse bg-{{ computer.get_color }}">
                             {{ computer.name }}
                             {% if status.description %}
                                 <small>{{ status.description }}</small>
                             {% endif %}
-                        </h5>
+                        </h6>
                         <div class="card-block">
                             <ul class="list-unstyled mb-0">
                                 <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
@@ -146,10 +144,6 @@
                     </div>
                 </div>
             {% endwith %}
-            {% if forloop.counter|divisibleby:4 %}
-                </div>
-                <div class="row">
-            {% endif %}
         {% endfor %}
         </div>
 {% endblock content %}
