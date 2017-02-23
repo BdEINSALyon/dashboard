@@ -19,3 +19,7 @@ body {
 ul.no-style {
     list-style: none;
 }
+
+li {
+    padding: 0 0 0 0.5ex;
+}
