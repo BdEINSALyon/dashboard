@@ -44,54 +44,54 @@
                         <div class="card-block">
                             <ul class="list-unstyled mb-0">
                                 <li>
-                                    <i class="fa fa-windows"></i> Windows
+                                    <i class="fa fa-fw fa-windows"></i> Windows
                                     <ul>
                                         <li class="text-white bg-{% if status.windows_activation %}success{% else %}danger{% endif %}">
                                             Activation
                                         </li>
                                         <li>
-                                            <i class="fa fa-download"></i> {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
+                                            <i class="fa fa-fw fa-download"></i> {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
                                         </li>
                                     </ul>
                                 </li>
-                                <li><i class="fa fa-calendar-check-o"></i> Tâches programmées
+                                <li><i class="fa fa-fw fa-calendar-check-o"></i> Tâches programmées
                                     <ul>
                                         {% for _, task in computer.get_sorted_tasks %}
                                             <li data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if task.installed %}success{% elif task.mandatory %}danger{% else %}warning{% endif %}">
-                                                {% if task.icon %}<i class="fa fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
+                                                {% if task.icon %}<i class="fa fa-fw fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
-                                <li><i class="fa fa-cubes"></i> Logiciels
+                                <li><i class="fa fa-fw fa-cubes"></i> Logiciels
                                     <ul>
                                         {% for _, app in computer.get_sorted_apps %}
                                             <li data-toggle="tooltip"
                                                 data-placement="top"
                                                 title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
-                                                {% if app.icon %}<i class="fa fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
+                                                {% if app.icon %}<i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
                                 {% if status.network %}
-                                    <li><i class="fa fa-share-alt"></i> Réseau
+                                    <li><i class="fa fa-fw fa-share-alt"></i> Réseau
                                         <ul>
                                             <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
                                             DHCP activé
                                             </li>
-                                            <li><i class="fa fa-at"></i> {{ status.network.ip }}</li>
+                                            <li><i class="fa fa-fw fa-at"></i> {{ status.network.ip }}</li>
                                         </ul>
                                     </li>
                                 {% endif %}
                             <li>
-                                <i class="fa fa-bar-chart"></i> Usage
+                                <i class="fa fa-fw fa-bar-chart"></i> Usage
                                 <ul>
-                                    <li><i class="fa fa-server"></i> RAM ({{ computer.total_ram }} Go)
+                                    <li><i class="fa fa-fw fa-server"></i> RAM ({{ computer.total_ram }} Go)
                                         <div class="progress">
                                             <div class="progress-bar bg-{{ computer.get_ram_color }}"
                                                  role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
@@ -101,7 +101,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li><i class="fa fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
+                                    <li><i class="fa fa-fw fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
                                         <div class="progress">
                                             <div class="progress-bar bg-{{ computer.get_disk_color }}"
                                                  role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
@@ -114,14 +114,14 @@
                                 </ul>
                             </li>
 
-                            <li><i class="fa fa-sliders"></i> Divers
+                            <li><i class="fa fa-fw fa-sliders"></i> Divers
                                 <ul>
                                     <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
-                                        <i class="fa fa-print"></i> Imprimante MA
+                                        <i class="fa fa-fw fa-print"></i> Imprimante MA
                                     </li>
 
                                     <li class="text-white bg-{% if computer.is_offline %}warning{% else %}success{% endif %}">
-                                        <i class="fa fa-calendar-check-o"></i>
+                                        <i class="fa fa-fw fa-calendar-check-o"></i>
                                         {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                     </li>
 
