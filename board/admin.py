@@ -25,10 +25,10 @@ class VerifAdmin(admin.ModelAdmin):
         VerifValueInline
     ]
 
-    list_display = ['id', 'type', 'tag', 'display_name', 'mandatory']
+    list_display = ['tag', 'type', 'display_name', 'icon', 'mandatory']
 
-    list_display_links = ['id']
-    list_editable = ['type', 'tag', 'display_name', 'mandatory']
+    list_display_links = ['tag']
+    list_editable = ['display_name', 'icon', 'mandatory']
 
     list_filter = ['type', 'mandatory']
 
