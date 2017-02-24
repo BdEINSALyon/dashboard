@@ -5,7 +5,8 @@ from board import models
 
 @admin.register(models.Computer)
 class ComputerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name']
+    list_display_links = ['name']
 
 
 @admin.register(models.VerifType)
