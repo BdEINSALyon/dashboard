@@ -7,6 +7,7 @@ from board import models
 class ComputerAdmin(admin.ModelAdmin):
     list_display = ['name']
     list_display_links = ['name']
+    ordering = ['name']
 
 
 @admin.register(models.VerifType)
