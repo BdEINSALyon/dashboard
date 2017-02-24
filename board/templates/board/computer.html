@@ -18,8 +18,8 @@
                 {% block title %}Salle IF{% endblock title %}
             </div>
             <div class="hidden-sm-down btn-group align-self-center">
-                <button class="hide-ok switch btn btn-secondary">Montrer uniquement les problèmes.</button>
-                <button class="show-ok switch btn btn-secondary">Montrer tous les postes.</button>
+                <button class="hide-ok switch btn btn-secondary">Montrer uniquement les problèmes</button>
+                <button class="show-ok switch btn btn-secondary">Montrer tous les postes</button>
             </div>
         </div>
         </div>
@@ -50,7 +50,7 @@
                                             Activation
                                         </li>
                                         <li>
-                                            Installé le {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
+                                            <i class="fa fa-download"></i> {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
                                         </li>
                                     </ul>
                                 </li>
