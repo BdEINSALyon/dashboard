@@ -150,6 +150,7 @@ class Verif(models.Model):
     tag = models.CharField(max_length=100)
     display_name = models.CharField(max_length=200)
     mandatory = models.BooleanField(default=True)
+    icon = models.CharField(max_length=50, blank=True)
     type = models.ForeignKey(
         to=VerifType,
         on_delete=models.CASCADE,
