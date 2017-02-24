@@ -61,7 +61,7 @@
                                                 data-placement="top"
                                                 title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if task.installed %}success{% elif task.mandatory %}danger{% else %}warning{% endif %}">
-                                                {{ task.name }}
+                                                {% if task.icon %}<i class="fa fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -73,7 +73,7 @@
                                                 data-placement="top"
                                                 title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
-                                                {{ app.name }}
+                                                {% if app.icon %}<i class="fa fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
