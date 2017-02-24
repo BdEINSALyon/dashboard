@@ -36,7 +36,7 @@
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="mb-3 card card-outline-{{ computer.get_color }}">
                         <h6 class="card-header card-inverse bg-{{ computer.get_color }}">
-                            {{ computer.name }}
+                            <i class="fa fa-desktop"></i> {{ computer.name }}
                             {% if status.description %}
                                 <small>{{ status.description }}</small>
                             {% endif %}
@@ -44,20 +44,20 @@
                         <div class="card-block">
                             <ul class="list-unstyled mb-0">
                                 <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
-                                    Imprimante MA
+                                    <i class="fa fa-print"></i> Imprimante MA
                                 </li>
                                 <li>
-                                    Windows
+                                    <i class="fa fa-windows"></i> Windows
                                     <ul class="no-style">
                                         <li class="text-white bg-{% if status.windows_activation %}success{% else %}danger{% endif %}">
-                                            Activé
+                                            Activation
                                         </li>
                                         <li>
                                             Installé le {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
                                         </li>
                                     </ul>
                                 </li>
-                                <li>Tâches programmées :
+                                <li><i class="fa fa-calendar-check-o"></i> Tâches programmées :
                                     <ul class="no-style">
                                         {% for _, task in computer.get_sorted_tasks %}
                                             <li data-toggle="tooltip"
@@ -69,7 +69,7 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
-                                <li>Logiciels :
+                                <li><i class="fa fa-cubes"></i> Logiciels :
                                     <ul class="no-style">
                                         {% for _, app in computer.get_sorted_apps %}
                                             <li data-toggle="tooltip"
@@ -82,7 +82,7 @@
                                     </ul>
                                 </li>
                                 {% if status.network %}
-                                    <li>Réseau :
+                                    <li><i class="fa fa-share-alt"></i> Réseau :
                                         <ul class="no-style">
                                             <li>Adresse IP : {{ status.network.ip }}</li>
                                             <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
@@ -91,7 +91,7 @@
                                         </ul>
                                     </li>
                                 {% endif %}
-                                <li>RAM ({{ computer.total_ram }} Go)
+                                <li><i class="fa fa-server"></i> RAM ({{ computer.total_ram }} Go)
                                     <div class="progress">
                                         <div class="progress-bar bg-{{ computer.get_ram_color }}"
                                              role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li>Disque dur C: ({{ computer.total_disk }} Go)
+                                <li><i class="fa fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
                                     <div class="progress">
                                         <div class="progress-bar bg-{{ computer.get_disk_color }}"
                                              role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
