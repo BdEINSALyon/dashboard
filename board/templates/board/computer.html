@@ -54,7 +54,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><i class="fa fa-calendar-check-o"></i> Tâches programmées :
+                                <li><i class="fa fa-calendar-check-o"></i> Tâches programmées
                                     <ul>
                                         {% for _, task in computer.get_sorted_tasks %}
                                             <li data-toggle="tooltip"
@@ -66,7 +66,7 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
-                                <li><i class="fa fa-cubes"></i> Logiciels :
+                                <li><i class="fa fa-cubes"></i> Logiciels
                                     <ul>
                                         {% for _, app in computer.get_sorted_apps %}
                                             <li data-toggle="tooltip"
@@ -79,35 +79,40 @@
                                     </ul>
                                 </li>
                                 {% if status.network %}
-                                    <li><i class="fa fa-share-alt"></i> Réseau :
+                                    <li><i class="fa fa-share-alt"></i> Réseau
                                         <ul>
-                                            <li>Adresse IP : {{ status.network.ip }}</li>
                                             <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
-                                                DHCP activé
+                                            DHCP activé
                                             </li>
+                                            <li>{{ status.network.ip }}</li>
                                         </ul>
                                     </li>
                                 {% endif %}
-                                <li><i class="fa fa-server"></i> RAM ({{ computer.total_ram }} Go)
-                                    <div class="progress">
-                                        <div class="progress-bar bg-{{ computer.get_ram_color }}"
-                                             role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
-                                             aria-valuemin="0" aria-valuemax="100"
-                                             style="width: {{ computer.get_ram_percentage }}%;">
-                                            {{ computer.get_ram_percentage }}%
+                            <li>
+                                <i class="fa fa-bar-chart"></i> Usage
+                                <ul>
+                                    <li><i class="fa fa-server"></i> RAM ({{ computer.total_ram }} Go)
+                                        <div class="progress">
+                                            <div class="progress-bar bg-{{ computer.get_ram_color }}"
+                                                 role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
+                                                 aria-valuemin="0" aria-valuemax="100"
+                                                 style="width: {{ computer.get_ram_percentage }}%;">
+                                                {{ computer.get_ram_percentage }}%
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li><i class="fa fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
-                                    <div class="progress">
-                                        <div class="progress-bar bg-{{ computer.get_disk_color }}"
-                                             role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
-                                             aria-valuemin="0" aria-valuemax="100"
-                                             style="width: {{ computer.get_disk_percentage }}%;">
-                                            {{ computer.get_disk_percentage }}%
+                                    </li>
+                                    <li><i class="fa fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
+                                        <div class="progress">
+                                            <div class="progress-bar bg-{{ computer.get_disk_color }}"
+                                                 role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
+                                                 aria-valuemin="0" aria-valuemax="100"
+                                                 style="width: {{ computer.get_disk_percentage }}%;">
+                                                {{ computer.get_disk_percentage }}%
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                </ul>
+                            </li>
 
                             <li><i class="fa fa-sliders"></i> Divers
                                 <ul>

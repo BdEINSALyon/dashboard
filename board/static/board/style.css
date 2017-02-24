@@ -16,6 +16,10 @@ body {
     margin-bottom: 1ex;
 }
 
+.card-block {
+    padding: 0.75rem;
+}
+
 li {
     padding: 0 0 0 0.5ex;
 }
