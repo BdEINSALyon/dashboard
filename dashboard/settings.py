@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
+import ast
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,7 +26,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY', 'nizqwxuy91c*(ij*tj)6zw@6=s(bv6*1sk&79^)w8^^*%#3a-_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG ?
+# Retrieve environment
+ENV = os.getenv('DJANGO_ENV', 'prod')
+debug_env = os.getenv('DEBUG', None)
+
+# Define production
+PROD = ENV in ['prod', 'production']
+
+# By default, if we're in prod, we don't want debug
+DEBUG = not PROD
+
+# But we can override this.
+if debug_env is not None:
+    DEBUG = ast.literal_eval(debug_env)
 
 ALLOWED_HOSTS = ['localhost', '.herokuapp.com', 'web', '.bde-insa-lyon.fr']
 
@@ -72,6 +85,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'dashboard.wsgi.application'
 
