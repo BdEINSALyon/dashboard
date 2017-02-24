@@ -46,8 +46,16 @@
                                 <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
                                     Imprimante MA
                                 </li>
-                                <li class="text-white bg-{% if status.windows_activation %}success{% else %}danger{% endif %}">
-                                    Activation de Windows
+                                <li>
+                                    Windows
+                                    <ul class="no-style">
+                                        <li class="text-white bg-{% if status.windows_activation %}success{% else %}danger{% endif %}">
+                                            Activé
+                                        </li>
+                                        <li>
+                                            Installé le {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li>Tâches programmées :
                                     <ul class="no-style">

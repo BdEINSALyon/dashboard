@@ -116,6 +116,15 @@ class Computer(models.Model):
     def get_color(self):
         return 'success' if self.is_ok() else 'danger'
 
+    @property
+    def install_date(self):
+        date = self.status['os'].get('install_date')
+        if date:
+            return datetime.datetime(year=date['year'], month=date['month'], day=date['day'],
+                                     hour=date['hour'], minute=date['minute'], second=date['second'])
+        else:
+            return None
+
 
 def mandatory_is_ok(lst):
     mandatory = []
