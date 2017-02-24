@@ -84,7 +84,7 @@
                                             <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
                                             DHCP activé
                                             </li>
-                                            <li>{{ status.network.ip }}</li>
+                                            <li><i class="fa fa-at"></i> {{ status.network.ip }}</li>
                                         </ul>
                                     </li>
                                 {% endif %}
