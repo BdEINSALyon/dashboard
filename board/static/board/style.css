@@ -16,14 +16,11 @@ body {
     margin-bottom: 1ex;
 }
 
-ul.no-style {
-    list-style: none;
-}
-
 li {
     padding: 0 0 0 0.5ex;
 }
 
 li ul {
     padding-left: 1.2em;
+    list-style: none;
 }
