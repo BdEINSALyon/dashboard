@@ -20,7 +20,7 @@ body {
     padding: 0.75rem;
 }
 
-li {
+li.bg-success, li.bg-danger, li.bg-warning {
     padding: 0 0 0 0.5ex;
 }
 
