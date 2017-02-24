@@ -23,3 +23,7 @@ ul.no-style {
 li {
     padding: 0 0 0 0.5ex;
 }
+
+li ul {
+    padding-left: 1.2em;
+}
