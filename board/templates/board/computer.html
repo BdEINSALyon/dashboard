@@ -18,20 +18,26 @@
                 {% block title %}Salle IF{% endblock title %}
             </div>
             <div class="hidden-sm-down btn-group align-self-center">
-                <button class="hide-ok switch btn btn-secondary">Montrer uniquement les problèmes</button>
-                <button class="show-ok switch btn btn-secondary">Montrer tous les postes</button>
+                {% if issues %}
+                    <a href="{% url 'board:computers' %}" class="btn btn-secondary">Montrer tous les postes</a>
+                {% else %}
+                    <a href="{% url 'board:computers_issues' %}" class="btn btn-secondary active">Montrer uniquement les problèmes</a>
+                {% endif %}
             </div>
         </div>
         </div>
     </div>
     <div class="row hidden-md-up mb-3">
         <div class="col-sm-12">
-            <button class="hide-ok switch btn-block btn btn-secondary">Montrer uniquement les problèmes.</button>
-            <button class="show-ok switch btn-block btn btn-secondary">Montrer tous les postes.</button>
+            {% if issues %}
+                <a href="{% url 'board:computers' %}" class="btn-block btn btn-secondary">Montrer tous les postes.</a>
+            {% else %}
+                <a href="{% url 'board:computers_issues' %}" class="btn-block btn btn-secondary">Montrer uniquement les problèmes.</a>
+            {% endif %}
         </div>
     </div>
     <div class="row">
-        {% for computer in computer_list %}
+        {% for computer in computers %}
             {% with status=computer.status %}
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="mb-3 card card-outline-{{ computer.get_color }}">

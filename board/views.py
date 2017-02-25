@@ -12,7 +12,12 @@ from board.models import Computer
 
 class ComputerListView(ListView):
     template_name = 'board/computer.html'
-    context_object_name = 'computer_list'
+    context_object_name = 'computers'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = False
+        return context
 
     def get_queryset(self):
         return Computer.objects.order_by('name')
@@ -20,6 +25,17 @@ class ComputerListView(ListView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+
+class ComputerIssuesListView(ComputerListView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = True
+        return context
+
+    def get_queryset(self):
+        computers = super().get_queryset()
+        return [computer for computer in computers if not computer.is_ok()]
 
 
 @csrf_exempt
