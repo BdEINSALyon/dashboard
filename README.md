@@ -1,12 +1,12 @@
 # Dashboard
-Dashboard pour monitorer les ordinateurs du BdE
+Dashboard pour monitorer les ordinateurs du BdE. Utilise [Dashboard client](https://github.com/bdeinsalyon/dashboard_client) pour la remontée d'informations.
 
 ## Licence
 
 [![GNU GPL v3.0](http://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl.html)
 
 ```
-Dashboard - Monitor BdE's computers
+Dashboard - Monitor INSA Lyon Student Union (BdE INSA Lyon) computers.
 Copyright (C) 2017 Gabriel AUGENDRE
 Copyright (C) 2017 BdE INSA Lyon
 
