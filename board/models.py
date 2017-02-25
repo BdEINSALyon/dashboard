@@ -7,7 +7,8 @@ from django.contrib.postgres.fields import JSONField
 
 DISK_DANGER = 90
 RAM_DANGER = 90
-TEMP_PROFILES_DANGER = 2
+TEMP_PROFILES_DANGER = 3
+
 
 class Computer(models.Model):
     status = JSONField()
