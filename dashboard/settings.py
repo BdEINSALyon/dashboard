@@ -41,8 +41,10 @@ DEBUG = not PROD
 if debug_env is not None:
     DEBUG = ast.literal_eval(debug_env)
 
-ALLOWED_HOSTS = ['localhost', '.herokuapp.com', 'web', '.bde-insa-lyon.fr']
+ALLOWED_HOSTS = ['.bde-insa-lyon.fr']
 
+if not PROD:
+    ALLOWED_HOSTS.append('localhost')
 
 # Application definition
 
