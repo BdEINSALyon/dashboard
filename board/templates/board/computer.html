@@ -11,11 +11,12 @@
 {% endblock body-js %}
 
 {% block content %}
+    <!-- Title and buttons -->
     <div class="row">
         <div class="col-md-12">
         <div class="d-flex justify-content-between my-3">
             <div class="h1 d-inline m-0">
-                {% block title %}Salle IF{% endblock title %}
+                {% block title %}Dashboard{% endblock title %}
             </div>
             <div class="hidden-sm-down btn-group align-self-center">
                 {% if issues %}
@@ -36,6 +37,8 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Cards -->
     <div class="row">
         {% for computer in computers %}
             {% with status=computer.status %}
