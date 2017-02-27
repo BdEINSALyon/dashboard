@@ -166,6 +166,11 @@
                                             </div>
                                         </li>
                                     {% endwith %}
+                                    <li>
+                                        <span class="badge badge-pill badge-default">{{ status.os.total_sessions }}</span>
+                                            session{% if status.os.total_sessions > 1 %}s{% endif %}
+                                            ouverte{% if status.os.total_sessions > 1 %}s{% endif %}
+                                    </li>
                                 </ul>
                             </li>
                             </ul>

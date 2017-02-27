@@ -15,7 +15,11 @@
 }
 
 li.bg-success, li.bg-danger, li.bg-warning {
-    padding: 0 0 0 0.5ex;
+    padding-left: 0.5ex;
+}
+
+li ul li {
+    padding-left: 0.5ex;
 }
 
 li ul {
