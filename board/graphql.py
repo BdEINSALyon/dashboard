@@ -1,15 +1,17 @@
-from django.contrib.auth import get_user_model
-from graphene import ObjectType, Node, Schema
+from graphene import ObjectType, Node, Schema, Field
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
 from board import models
 
 
-class User(DjangoObjectType):
+class Computer(DjangoObjectType):
     class Meta:
-        model = get_user_model()
+        model = models.Computer
         interfaces = (Node,)
+        filter_fields = {
+            'name': ['exact', 'icontains', 'istartswith']
+        }
 
 
 class VerifType(DjangoObjectType):
@@ -43,6 +45,16 @@ class VerifValue(DjangoObjectType):
         }
 
 
+class ExceptionRule(DjangoObjectType):
+    class Meta:
+        model = models.ExceptionRule
+        interfaces = (Node,)
+        filter_fields = {
+            'value': ['exact', 'icontains', 'istartswith'],
+            'verif': ['exact'],
+        }
+
+
 class Query(ObjectType):
     verif_type = Node.Field(VerifType)
     all_verif_types = DjangoFilterConnectionField(VerifType)
@@ -55,4 +67,4 @@ class Query(ObjectType):
 
 
 schema = Schema(query=Query,
-                types=[Verif, VerifType, VerifValue])
+                types=[Verif, VerifType, VerifValue, Computer, ExceptionRule])

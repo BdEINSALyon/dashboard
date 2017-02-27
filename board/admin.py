@@ -19,10 +19,15 @@ class VerifValueInline(admin.TabularInline):
     model = models.VerifValue
 
 
+class ExceptionRuleInline(admin.TabularInline):
+    model = models.ExceptionRule
+
+
 @admin.register(models.Verif)
 class VerifAdmin(admin.ModelAdmin):
     inlines = [
-        VerifValueInline
+        VerifValueInline,
+        ExceptionRuleInline
     ]
 
     list_display = ['tag', 'type', 'display_name', 'icon', 'mandatory']
@@ -35,6 +40,13 @@ class VerifAdmin(admin.ModelAdmin):
 
 @admin.register(models.VerifValue)
 class VerifValueAdmin(admin.ModelAdmin):
+    list_display = ['id', 'verif', 'value']
+    list_display_links = ['id']
+    list_editable = ['verif', 'value']
+
+
+@admin.register(models.ExceptionRule)
+class ExceptionRuleAdmin(admin.ModelAdmin):
     list_display = ['id', 'verif', 'value']
     list_display_links = ['id']
     list_editable = ['verif', 'value']

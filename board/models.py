@@ -148,7 +148,7 @@ class VerifType(models.Model):
 
 
 class Verif(models.Model):
-    tag = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100, unique=True)
     display_name = models.CharField(max_length=200)
     mandatory = models.BooleanField(default=True)
     icon = models.CharField(max_length=50, blank=True)
@@ -162,6 +162,15 @@ class Verif(models.Model):
         return '{0}'.format(
             self.display_name
         )
+
+
+class ExceptionRule(models.Model):
+    value = models.CharField(max_length=100)
+    verif = models.ForeignKey(
+        to=Verif,
+        on_delete=models.CASCADE,
+        related_name='exceptionRules'
+    )
 
 
 class VerifValue(models.Model):
