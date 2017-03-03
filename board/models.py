@@ -171,6 +171,7 @@ class ExceptionRule(models.Model):
         on_delete=models.CASCADE,
         related_name='exceptionRules'
     )
+    reason = models.CharField(max_length=200, blank=True)
 
 
 class VerifValue(models.Model):
