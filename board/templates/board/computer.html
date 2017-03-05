@@ -31,7 +31,6 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <form action="{% url 'board:computers' %}" method="get">
-                                {% csrf_token %}
                                 {{ filters_form.media }}
                                 {{ filters_form|crispy }}
                                 <input class="btn btn-primary" type="submit" value="Filtrer"/>
@@ -45,7 +44,6 @@
     <div class="row hidden-md-up mb-3">
         <div class="col-sm-12">
             <form action="{% url 'board:computers' %}" method="get">
-                {% csrf_token %}
                 {{ filters_form.media }}
                 {{ filters_form|crispy }}
                 <input class="btn btn-primary" type="submit" value="Filtrer"/>

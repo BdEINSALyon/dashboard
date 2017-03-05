@@ -11,13 +11,13 @@ class FiltersForm(forms.Form):
     ON_OFFLINE_CHOICES = [
         (ONLINE, 'En ligne'),
         (OFFLINE, 'Hors ligne'),
-        (NONE, 'Aucun'),
+        (NONE, 'Non spécifié'),
     ]
 
     OK_ISSUES_CHOICES = [
         (ISSUES, 'Problèmes'),
         (OK, 'Ok'),
-        (NONE, 'Aucun'),
+        (NONE, 'Non spécifié'),
     ]
 
     status = forms.ChoiceField(choices=ON_OFFLINE_CHOICES, widget=forms.RadioSelect, label='En ligne')

@@ -30,6 +30,7 @@ class ComputerListView(ListView):
             context['filters_form'] = FiltersForm(initial={
                 'status': FiltersForm.NONE,
                 'issues': FiltersForm.NONE,
+                'apply': True
             })
 
         # Set title
