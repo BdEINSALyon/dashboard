@@ -1,6 +1,9 @@
 {% extends 'board/base.html' %}
 {% load tz %}
 {% load static %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_field %}
+
 {% block meta %}
     <meta http-equiv="refresh" content="60;">
 {% endblock meta %}
@@ -10,32 +13,43 @@
     <script src="{% static 'board/script.js' %}"></script>
 {% endblock body-js %}
 
+{% block title %}Dashboard - {{ title }}{% endblock title %}
+
 {% block content %}
     <!-- Title and buttons -->
     <div class="row">
         <div class="col-md-12">
-        <div class="d-flex justify-content-between my-3">
-            <div class="h1 d-inline m-0">
-                {% block title %}Dashboard - {% if issues %}Problèmes{% else %}Tout{% endif %}{% endblock title %}
-                <span class="badge badge-default">{{ computers|length }}</span>
+            <div class="d-flex justify-content-between my-3">
+                <div class="h1 d-inline m-0">
+                    Dashboard <small>{{ title }}</small>
+                    <span class="badge badge-default">{{ computers|length }}</span>
+                </div>
+                <div class="hidden-sm-down btn-group align-self-center">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                            Filtres
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <form action="{% url 'board:computers' %}" method="get">
+                                {% csrf_token %}
+                                {{ filters_form.media }}
+                                {{ filters_form|crispy }}
+                                <input class="btn btn-primary" type="submit" value="Filtrer"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="hidden-sm-down btn-group align-self-center">
-                {% if issues %}
-                    <a href="{% url 'board:computers' %}" class="btn btn-secondary">Montrer tous les postes</a>
-                {% else %}
-                    <a href="{% url 'board:computers_issues' %}" class="btn btn-secondary">Montrer uniquement les problèmes</a>
-                {% endif %}
-            </div>
-        </div>
         </div>
     </div>
     <div class="row hidden-md-up mb-3">
         <div class="col-sm-12">
-            {% if issues %}
-                <a href="{% url 'board:computers' %}" class="btn-block btn btn-secondary">Montrer tous les postes.</a>
-            {% else %}
-                <a href="{% url 'board:computers_issues' %}" class="btn-block btn btn-secondary">Montrer uniquement les problèmes.</a>
-            {% endif %}
+            <form action="{% url 'board:computers' %}" method="get">
+                {% csrf_token %}
+                {{ filters_form.media }}
+                {{ filters_form|crispy }}
+                <input class="btn btn-primary" type="submit" value="Filtrer"/>
+            </form>
         </div>
     </div>
 
@@ -71,7 +85,8 @@
                                                 data-placement="top"
                                                 title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if task.installed %}success{% elif task.mandatory %}danger{% else %}warning{% endif %}">
-                                                {% if task.icon %}<i class="fa fa-fw fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
+                                                {% if task.icon %}
+                                                    <i class="fa fa-fw fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -83,7 +98,8 @@
                                                 data-placement="top"
                                                 title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
-                                                {% if app.icon %}<i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
+                                                {% if app.icon %}
+                                                    <i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -92,93 +108,96 @@
                                     <li><i class="fa fa-fw fa-share-alt"></i> Réseau
                                         <ul>
                                             <li class="text-white bg-{% if status.network.dhcp %}success{% else %}danger{% endif %}">
-                                            DHCP activé
+                                                DHCP activé
                                             </li>
                                             <li><i class="fa fa-fw fa-at"></i> {{ status.network.ip }}</li>
                                             <li><i class="fa fa-fw fa-at"></i> {{ status.network.mac }}</li>
                                         </ul>
                                     </li>
                                 {% endif %}
-                            <li>
-                                <i class="fa fa-fw fa-bar-chart"></i> Usage
-                                <ul>
-                                    <li><i class="fa fa-fw fa-server"></i> RAM ({{ computer.total_ram }} Go)
-                                        <div class="progress">
-                                            <div class="progress-bar bg-{{ computer.get_ram_color }}"
-                                                 role="progressbar" aria-valuenow="{{ computer.get_ram_percentage }}"
-                                                 aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: {{ computer.get_ram_percentage }}%;">
-                                                {{ computer.get_ram_percentage }}%
+                                <li>
+                                    <i class="fa fa-fw fa-bar-chart"></i> Usage
+                                    <ul>
+                                        <li><i class="fa fa-fw fa-server"></i> RAM ({{ computer.total_ram }} Go)
+                                            <div class="progress">
+                                                <div class="progress-bar bg-{{ computer.get_ram_color }}"
+                                                     role="progressbar"
+                                                     aria-valuenow="{{ computer.get_ram_percentage }}"
+                                                     aria-valuemin="0" aria-valuemax="100"
+                                                     style="width: {{ computer.get_ram_percentage }}%;">
+                                                    {{ computer.get_ram_percentage }}%
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li><i class="fa fa-fw fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }} Go)
-                                        <div class="progress">
-                                            <div class="progress-bar bg-{{ computer.get_disk_color }}"
-                                                 role="progressbar" aria-valuenow="{{ computer.get_disk_percentage }}"
-                                                 aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: {{ computer.get_disk_percentage }}%;">
-                                                {{ computer.get_disk_percentage }}%
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li><i class="fa fa-fw fa-sliders"></i> Divers
-                                <ul>
-                                    <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
-                                        <i class="fa fa-fw fa-print"></i> Imprimante MA
-                                    </li>
-
-                                    <li class="text-white bg-{% if computer.is_offline %}warning{% else %}success{% endif %}">
-                                        <i class="fa fa-fw fa-calendar-check-o"></i>
-                                        {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
-                                    </li>
-
-                                    {% with prof=status.os.temp_profiles %}
-                                        <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
-                                            <span class="badge badge-pill badge-default">{{ prof }}</span>
-                                            profil{% if prof > 1 %}s{% endif %}
-                                            temporaire{% if prof|length > 1 %}s{% endif %}
                                         </li>
-                                    {% endwith %}
+                                        <li><i class="fa fa-fw fa-hdd-o"></i> Disque dur C: ({{ computer.total_disk }}
+                                            Go)
+                                            <div class="progress">
+                                                <div class="progress-bar bg-{{ computer.get_disk_color }}"
+                                                     role="progressbar"
+                                                     aria-valuenow="{{ computer.get_disk_percentage }}"
+                                                     aria-valuemin="0" aria-valuemax="100"
+                                                     style="width: {{ computer.get_disk_percentage }}%;">
+                                                    {{ computer.get_disk_percentage }}%
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                                    {% with locked=status.os.locked %}
-                                        <li>
-                                            {% if locked %}
-                                                <a data-toggle="collapse" href="#session-{{ computer.name }}">
-                                            {% endif %}
+                                <li><i class="fa fa-fw fa-sliders"></i> Divers
+                                    <ul>
+                                        <li class="text-white bg-{% if status.imprimante_ma %}success{% else %}danger{% endif %}">
+                                            <i class="fa fa-fw fa-print"></i> Imprimante MA
+                                        </li>
+
+                                        <li class="text-white bg-{% if computer.is_offline %}warning{% else %}success{% endif %}">
+                                            <i class="fa fa-fw fa-calendar-check-o"></i>
+                                            {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
+                                        </li>
+
+                                        {% with prof=status.os.temp_profiles %}
+                                            <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
+                                                <span class="badge badge-pill badge-default">{{ prof }}</span>
+                                                profil{% if prof > 1 %}s{% endif %}
+                                                temporaire{% if prof|length > 1 %}s{% endif %}
+                                            </li>
+                                        {% endwith %}
+
+                                        {% with locked=status.os.locked %}
+                                            <li>
+                                                {% if locked %}
+                                                    <a data-toggle="collapse" href="#session-{{ computer.name }}">
+                                                {% endif %}
                                                 <span class="badge badge-pill badge-default">{{ locked|length }}</span>
                                                 session{% if locked|length > 1 %}s{% endif %}
                                                 verrouillée{% if locked|length > 1 %}s{% endif %}
-                                            {% if locked %}
-                                                </a>
-                                            {% endif %}
-                                            <div id="session-{{ computer.name }}" class="collapse">
-                                                <ul>
-                                                    {% for username in status.os.locked %}
-                                                        <li>
-                                                            {{ username }}
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    {% endwith %}
-                                    <li>
-                                        <span class="badge badge-pill badge-default">{{ status.os.total_sessions }}</span>
+                                                {% if locked %}
+                                                    </a>
+                                                {% endif %}
+                                                <div id="session-{{ computer.name }}" class="collapse">
+                                                    <ul>
+                                                        {% for username in status.os.locked %}
+                                                            <li>
+                                                                {{ username }}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        {% endwith %}
+                                        <li>
+                                            <span class="badge badge-pill badge-default">{{ status.os.total_sessions }}</span>
                                             session{% if status.os.total_sessions > 1 %}s{% endif %}
                                             ouverte{% if status.os.total_sessions > 1 %}s{% endif %}
                                             au total
-                                    </li>
-                                </ul>
-                            </li>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             {% endwith %}
         {% endfor %}
-        </div>
+    </div>
 {% endblock content %}

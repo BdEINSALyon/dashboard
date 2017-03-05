@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import json
 
+from board.forms import FiltersForm
 from board.models import Computer
 
 
@@ -14,28 +15,68 @@ class ComputerListView(ListView):
     template_name = 'board/computer.html'
     context_object_name = 'computers'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['issues'] = False
+
+        apply_filters = self.request.GET.get('apply', None)
+
+        issues = self.request.GET.get('issues', None)
+        status = self.request.GET.get('status', None)
+
+        # Set Form
+        if issues or status or apply_filters:
+            context['filters_form'] = FiltersForm(self.request.GET)
+        else:
+            context['filters_form'] = FiltersForm(initial={
+                'status': FiltersForm.NONE,
+                'issues': FiltersForm.NONE,
+            })
+
+        # Set title
+        if apply_filters:
+            title = []
+
+            if FiltersForm.ISSUES in issues:
+                title.append('Problèmes')
+            elif FiltersForm.OK in issues:
+                title.append('Ok')
+
+            if FiltersForm.OFFLINE in status:
+                title.append('Hors ligne')
+            if FiltersForm.ONLINE in status:
+                title.append('En ligne')
+
+            title = ' - '.join(title)
+        else:
+            title = 'Tout'
+
+        context['title'] = title
+
         return context
 
     def get_queryset(self):
-        return Computer.objects.order_by('name')
+        computers = Computer.objects.order_by('name')
+
+        apply_filters = self.request.GET.getlist('apply', None)
+
+        if apply_filters:
+            issues = self.request.GET.get('issues', None)
+            if FiltersForm.ISSUES in issues:
+                computers = [computer for computer in computers if not computer.is_ok()]
+            elif FiltersForm.OK in issues:
+                computers = [computer for computer in computers if computer.is_ok()]
+
+            status = self.request.GET.get('status', None)
+            if FiltersForm.OFFLINE in status:
+                computers = [computer for computer in computers if computer.is_offline()]
+            if FiltersForm.ONLINE in status:
+                computers = [computer for computer in computers if not computer.is_offline()]
+
+        return computers
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
-
-class ComputerIssuesListView(ComputerListView):
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['issues'] = True
-        return context
-
-    def get_queryset(self):
-        computers = super().get_queryset()
-        return [computer for computer in computers if not computer.is_ok()]
 
 
 @csrf_exempt

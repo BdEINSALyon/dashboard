@@ -1,6 +1,7 @@
 appdirs==1.4.0
 dj-database-url==0.4.2
 Django==1.10.5
+django-crispy-forms==1.6.1
 django-dotenv==1.4.1
 django-filter==1.0.1
 django-student-oauth==0.4
@@ -14,6 +15,7 @@ packaging==16.8
 promise==1.0.1
 psycopg2==2.6.2
 pyparsing==2.1.10
+pytest-runner==2.11.1
 requests==2.13.0
 singledispatch==3.4.0.3
 six==1.10.0

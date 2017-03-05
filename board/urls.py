@@ -1,9 +1,8 @@
 from django.conf.urls import url
 
-from board.views import ComputerListView, update_computer, ComputerIssuesListView
+from board.views import ComputerListView, update_computer
 
 urlpatterns = [
     url(r'^$', ComputerListView.as_view(), name='computers'),
-    url(r'^issues', ComputerIssuesListView.as_view(), name='computers_issues'),
     url(r'^update$', update_computer, name='computer-update'),
 ]

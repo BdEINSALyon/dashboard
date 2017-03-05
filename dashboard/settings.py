@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'board',
     'account',
     'graphene_django',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 
 WSGI_APPLICATION = 'dashboard.wsgi.application'
