@@ -1,6 +1,16 @@
 # Dashboard
 Dashboard pour monitorer les ordinateurs du BdE. Utilise [Dashboard client](https://github.com/bdeinsalyon/dashboard_client) pour la remontée d'informations.
 
+## Env variables
+
+```
+DATABASE_URL=postgres://postgres:postgres@localhost/dashboard
+DJANGO_ENV=prod
+MAILGUN_API_KEY=key-MAILGUN-KEY
+MAIL_DEST=dest1@example.com,dest2@example.com
+MAILGUN_DOMAIN=MAILGUN-DOMAIN
+```
+
 ## Licence
 
 [![GNU GPL v3.0](http://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/licenses/gpl.html)
