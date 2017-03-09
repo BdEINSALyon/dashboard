@@ -1,4 +1,7 @@
 # Create your views here.
+import os
+
+import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -95,7 +98,26 @@ def update_computer(request):
                 computer = Computer(name=name)
         computer.status = status
         computer.save()
+
+        if not computer.is_ok() and computer.last_update.minute % 2 == 0:
+            dest = os.getenv('MAIL_DEST', None)
+            if dest:
+                requests.post(
+                    "https://api.mailgun.net/v3/{0}/messages".format(os.getenv('MAILGUN_DOMAIN')),
+                    auth=("api", os.getenv('MAILGUN_API_KEY')),
+                    data={
+                        "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
+                        "to": dest.split(','),
+                        "subject": "{0} not OK".format(computer.name),
+                        "html": '{0} has some issues. '
+                                'Go check the <a href="https://status.bde-insa-lyon.fr">Dashboard</a> !'.format(
+                            computer.name),
+                        "o:tracking-clicks": "no",
+                        "o:tracking-opens": "no",
+                        "o:tracking": "no"
+                    }
+                )
+
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
-
