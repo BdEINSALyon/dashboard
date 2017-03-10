@@ -14,6 +14,7 @@ class Computer(models.Model):
     status = JSONField()
     name = models.CharField(max_length=100)
     last_update = models.DateTimeField(auto_now=True)
+    count_since_mail = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name

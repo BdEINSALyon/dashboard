@@ -97,9 +97,11 @@ def update_computer(request):
             except Computer.DoesNotExist:
                 computer = Computer(name=name)
         computer.status = status
-        computer.save()
 
-        if not computer.is_ok() and computer.last_update.minute % 2 == 0:
+        if not computer.is_ok():
+            computer.count_since_mail += 1
+
+        if computer.count_since_mail > 3:
             dest = os.getenv('MAIL_DEST', None)
             if dest:
                 requests.post(
@@ -117,6 +119,9 @@ def update_computer(request):
                         "o:tracking": "no"
                     }
                 )
+                computer.count_since_mail = 0
+
+        computer.save()
 
         return HttpResponse(status=200)
     else:
