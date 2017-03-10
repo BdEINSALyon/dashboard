@@ -98,28 +98,35 @@ def update_computer(request):
                 computer = Computer(name=name)
         computer.status = status
 
-        if not computer.is_ok():
+        if computer.is_ok():
+            computer.count_since_mail = 0
+        else:
             computer.count_since_mail += 1
 
-        if computer.count_since_mail > 3:
-            dest = os.getenv('MAIL_DEST', None)
-            if dest:
-                requests.post(
-                    "https://api.mailgun.net/v3/{0}/messages".format(os.getenv('MAILGUN_DOMAIN')),
-                    auth=("api", os.getenv('MAILGUN_API_KEY')),
-                    data={
-                        "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
-                        "to": dest.split(','),
-                        "subject": "{0} not OK".format(computer.name),
-                        "html": '{0} has some issues. '
-                                'Go check the <a href="https://status.bde-insa-lyon.fr">Dashboard</a> !'.format(
-                            computer.name),
-                        "o:tracking-clicks": "no",
-                        "o:tracking-opens": "no",
-                        "o:tracking": "no"
-                    }
-                )
-                computer.count_since_mail = 0
+        dest = os.getenv('MAIL_DEST', None)
+
+        if computer.count_since_mail > 2 and dest:
+            domain = os.getenv('MAILGUN_DOMAIN')
+            api_key = os.getenv('MAILGUN_API_KEY')
+
+            mail_html = '{0} has some issues.\nGo check the ' \
+                        '<a href="https://status.bde-insa-lyon.fr">Dashboard</a> !'.format(computer.name)
+
+            requests.post(
+                "https://api.mailgun.net/v3/{0}/messages".format(domain),
+                auth=("api", api_key),
+                data={
+                    "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
+                    "to": dest.split(','),
+                    "subject": "{0} not OK".format(computer.name),
+                    "html": mail_html,
+                    "o:tracking-clicks": "no",
+                    "o:tracking-opens": "no",
+                    "o:tracking": "no"
+                }
+            )
+
+            computer.count_since_mail = 0
 
         computer.save()
 
