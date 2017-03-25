@@ -16,6 +16,7 @@ promise==1.0.1
 psycopg2==2.6.2
 pyparsing==2.1.10
 pytest-runner==2.11.1
+pytz==2016.10
 requests==2.13.0
 singledispatch==3.4.0.3
 six==1.10.0

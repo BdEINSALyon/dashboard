@@ -1,12 +1,15 @@
 # Create your views here.
 import os
 
+import pytz
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_exempt
+
+import datetime
 
 import json
 
@@ -98,14 +101,20 @@ def update_computer(request):
                 computer = Computer(name=name)
         computer.status = status
 
+        utc = pytz.utc
+
         if computer.is_ok():
-            computer.count_since_mail = 0
-        else:
-            computer.count_since_mail += 1
+            computer.not_ok_since = None
+        elif computer.not_ok_since is None:
+            computer.not_ok_since = utc.localize(datetime.datetime.now())
 
         dest = os.getenv('MAIL_DEST', None)
 
-        if computer.count_since_mail > 2 and dest:
+        interval = None
+        if computer.not_ok_since is not None:
+            interval = utc.localize(datetime.datetime.now()) - computer.not_ok_since
+
+        if interval and interval > datetime.timedelta(minutes=59) and dest:
             domain = os.getenv('MAILGUN_DOMAIN')
             api_key = os.getenv('MAILGUN_API_KEY')
 
@@ -126,7 +135,7 @@ def update_computer(request):
                 }
             )
 
-            computer.count_since_mail = 0
+            computer.not_ok_since = None
 
         computer.save()
 
