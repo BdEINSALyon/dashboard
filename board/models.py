@@ -15,7 +15,7 @@ class Computer(models.Model):
     name = models.CharField(max_length=100)
     last_update = models.DateTimeField(auto_now=True)
     count_since_mail = models.PositiveIntegerField(default=0)
-    not_ok_since = models.DateTimeField(default=None, null=True)
+    not_ok_since = models.DateTimeField(default=None, null=True, blank=True)
 
     def __str__(self):
         return self.name
