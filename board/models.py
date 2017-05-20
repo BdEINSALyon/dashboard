@@ -21,28 +21,25 @@ class Computer(models.Model):
         return self.name
 
     def get_sorted_apps(self):
-        apps = self.status.get('apps')
-
-        if not apps:
-            return []
-
-        first = next(iter(apps.values()))
-        if isinstance(first, dict):
-            return OrderedDict(sorted(apps.items(), key=lambda app: app[1].get('name'))).items()
-        else:
-            return sorted(apps.items())
+        return self.get_sorted('apps')
 
     def get_sorted_tasks(self):
-        tasks = self.status.get('tasks')
+        return self.get_sorted('tasks')
 
-        if not tasks:
+    def get_sorted_registry(self):
+        return self.get_sorted('registry')
+
+    def get_sorted(self, tag):
+        reg = self.status.get(tag)
+
+        if not reg:
             return []
 
-        first = next(iter(tasks.values()))
+        first = next(iter(reg.values()))
         if isinstance(first, dict):
-            return OrderedDict(sorted(tasks.items(), key=lambda app: app[1].get('name'))).items()
+            return OrderedDict(sorted(reg.items(), key=lambda r: r[1].get('name'))).items()
         else:
-            return sorted(tasks.items())
+            return sorted(reg.items())
 
     def get_ram_percentage(self):
         value = self.status.get('os').get('ram')

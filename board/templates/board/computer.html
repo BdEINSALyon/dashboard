@@ -102,6 +102,19 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
+                                <li><i class="fa fa-fw fa-wrench"></i> Registre
+                                    <ul>
+                                        {% for _, app in computer.get_sorted_registry %}
+                                            <li data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="{% if app.verification and app.verification.type == 'registry' %}Clé(s) : {{ app.verification.keys|join:', ' }}{% endif %}"
+                                                class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
+                                                {% if app.icon %}
+                                                    <i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
                                 {% if status.network %}
                                     <li><i class="fa fa-fw fa-share-alt"></i> Réseau
                                         <ul>
