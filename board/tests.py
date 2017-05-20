@@ -96,6 +96,14 @@ class ComputerTestCase(TestCase):
                                  'verification': {'type': 'task',
                                                   'task_names': ['delete user profiles']}}
             },
+            'registry': {
+                'uac': {"installed": True,
+                        "icon": "",
+                        "name": "UAC",
+                        "mandatory": True,
+                        "verification": {"keys": ["HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /v EnableLUA == 0x1"],
+                                         "type": "registry"}}
+            },
             'network': {'ip': '134.214.129.44', 'mac': '80:ee:73:99:7b:47', 'dhcp': True},
             'name': 'BDE608-D01',
             'description': 'Shuttle tableau pas mur',
@@ -148,4 +156,10 @@ class ComputerTestCase(TestCase):
         d01 = Computer.objects.get(name='BDE608-D01')
         d01.status['tasks']['shutdown']['installed'] = False
         d01.status['tasks']['shutdown']['mandatory'] = True
+        self.assertFalse(d01.is_ok())
+
+    def test_computer_one_registry_not_equal(self):
+        d01 = Computer.objects.get(name='BDE608-D01')
+        d01.status['registry']['uac']['installed'] = False
+        d01.status['registry']['uac']['mandatory'] = True
         self.assertFalse(d01.is_ok())

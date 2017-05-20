@@ -5,6 +5,7 @@ import pytz
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_exempt
@@ -114,12 +115,12 @@ def update_computer(request):
         if computer.not_ok_since is not None:
             interval = utc.localize(datetime.datetime.now()) - computer.not_ok_since
 
-        if interval and interval > datetime.timedelta(minutes=59) and dest:
+        if not computer.is_ok() or (interval and interval > datetime.timedelta(minutes=59) and dest):
             domain = os.getenv('MAILGUN_DOMAIN')
             api_key = os.getenv('MAILGUN_API_KEY')
 
-            mail_html = '{0} has some issues.\nGo check the ' \
-                        '<a href="https://status.bde-insa-lyon.fr">Dashboard</a> !'.format(computer.name)
+            mail_template = get_template('board/mail/error.html')
+            mail_html = mail_template.render({'computer': computer})
 
             requests.post(
                 "https://api.mailgun.net/v3/{0}/messages".format(domain),

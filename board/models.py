@@ -94,24 +94,69 @@ class Computer(models.Model):
         return self.last_update + datetime.timedelta(minutes=10) < timezone.now()
 
     def is_ok(self):
+        return len(self.issues) == 0
+
+    @property
+    def issues(self):
+        issues = []
         if self.get_ram_percentage() > RAM_DANGER:
-            return False
+            issues.append({'name': 'RAM overload'})
 
         if self.get_disk_percentage() > DISK_DANGER:
-            return False
+            issues.append({'name': 'Disk overload'})
 
         status = self.status
         printer = status.get('imprimante_ma')
         activated = status.get('windows_activation')
         apps = status.get('apps')
         tasks = status.get('tasks')
+        registry = status.get('registry')
         network = status.get('network')
         temp = status.get('os').get('temp_profiles')
 
-        if not (printer and activated and apps and tasks and network) or temp is None:
-            return False
+        if not printer:
+            issues.append({'name': 'Printer missing'})
 
-        return network.get('dhcp') and temp < TEMP_PROFILES_DANGER and mandatory_is_ok(apps) and mandatory_is_ok(tasks)
+        if not activated:
+            issues.append({'name': 'Windows not activated'})
+
+        if apps:
+            apps_not_ok = missing_mandatory(apps)
+            if len(apps_not_ok) > 0:
+                for app in apps_not_ok:
+                    issues.append({'name': app['name'], 'reason': 'not installed'})
+        else:
+            issues.append({'name': 'Apps missing'})
+
+        if tasks:
+            tasks_not_ok = missing_mandatory(tasks)
+            if len(tasks_not_ok) > 0:
+                for task in tasks_not_ok:
+                    issues.append({'name': task['name'], 'reason': 'missing or disabled'})
+        else:
+            issues.append({'name': 'Tasks missing'})
+
+        if registry:
+            registry_not_ok = missing_mandatory(registry)
+            if len(registry_not_ok) > 0:
+                for reg in registry_not_ok:
+                    issues.append({'name': reg['name'], 'reason': "doesn't have the right value"})
+        else:
+            issues.append({'name': 'Registry missing'})
+
+        if not network:
+            issues.append({'name': 'Network missing'})
+
+        if temp is None:
+            issues.append({'name': 'Temporary profiles missing'})
+
+        if not network.get('dhcp'):
+            issues.append({'name': 'DHCP not enabled'})
+
+        if temp >= TEMP_PROFILES_DANGER:
+            issues.append({'name': 'Too many temporary profiles'})
+
+        return issues
 
     def get_color(self):
         return 'success' if self.is_ok() else 'danger'
@@ -126,17 +171,23 @@ class Computer(models.Model):
             return None
 
 
-def mandatory_is_ok(lst):
+def missing_mandatory(lst):
     mandatory = []
+    not_ok = []
+
     for name, item in lst.items():
         if item.get('mandatory'):
             mandatory.append(item)
 
-    mandatory_ok = True
     for item in mandatory:
-        mandatory_ok = mandatory_ok and item.get('installed')
+        if not item.get('installed'):
+            not_ok.append(item)
 
-    return mandatory_ok
+    return not_ok
+
+
+def mandatory_is_ok(lst):
+    return len(missing_mandatory(lst)) == 0
 
 
 class VerifType(models.Model):
