@@ -1,5 +1,5 @@
 <p>
-    {{ computer.name }} has some issues.<br>
+    {{ computer.name }}{% if computer.status and computer.status.description%} ({{ computer.status.description }}){% endif %} has some issues.<br>
     Go check the <a href="https://status.bde-insa-lyon.fr">Dashboard</a> !
 </p>
 <p>
