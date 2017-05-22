@@ -1,5 +1,5 @@
 <p>
-    {{ computer.full_name }} has some issues.<br>
+    {{ computer.full_name }}{% if computer.error_mail_sent %} still{% endif %} has some issues.<br>
     Go check the <a href="https://status.bde-insa-lyon.fr">Dashboard</a> !
 </p>
 <p>

@@ -104,38 +104,39 @@ def update_computer(request):
 
         utc = pytz.utc
 
+        dest = os.getenv('MAIL_DEST', None)
+
         if computer.is_ok():
+            # If it's a "back to normal", then we send a mail.
+            if computer.error_mail_sent:
+                subject = "{0} back to normal".format(computer.name)
+                mail_template = get_template('board/mail/normal.html')
+                mail_html = mail_template.render({'computer': computer})
+
+                send_mail(subject, dest, mail_html)
+
+            computer.error_mail_sent = False
             computer.not_ok_since = None
+
         elif computer.not_ok_since is None:
             computer.not_ok_since = utc.localize(datetime.datetime.now())
-
-        dest = os.getenv('MAIL_DEST', None)
 
         interval = None
         if computer.not_ok_since is not None:
             interval = utc.localize(datetime.datetime.now()) - computer.not_ok_since
 
         if interval and interval > datetime.timedelta(minutes=59) and dest:
-            domain = os.getenv('MAILGUN_DOMAIN')
-            api_key = os.getenv('MAILGUN_API_KEY')
-
+            # Send a mail if not ok for more than a hour.
             mail_template = get_template('board/mail/error.html')
             mail_html = mail_template.render({'computer': computer})
+            subject = "{0} not OK".format(computer.name)
 
-            requests.post(
-                "https://api.mailgun.net/v3/{0}/messages".format(domain),
-                auth=("api", api_key),
-                data={
-                    "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
-                    "to": dest.split(','),
-                    "subject": "{0} not OK".format(computer.name),
-                    "html": mail_html,
-                    "o:tracking-clicks": "no",
-                    "o:tracking-opens": "no",
-                    "o:tracking": "no"
-                }
-            )
+            if computer.error_mail_sent:
+                subject = "{0} still not OK".format(computer.name)
 
+            send_mail(subject, dest, mail_html)
+
+            computer.error_mail_sent = True
             computer.not_ok_since = None
 
         computer.save()
@@ -143,3 +144,22 @@ def update_computer(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
+
+
+def send_mail(subject, dest, mail_html):
+    domain = os.getenv('MAILGUN_DOMAIN')
+    api_key = os.getenv('MAILGUN_API_KEY')
+
+    requests.post(
+        "https://api.mailgun.net/v3/{0}/messages".format(domain),
+        auth=("api", api_key),
+        data={
+            "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
+            "to": dest.split(','),
+            "subject": subject,
+            "html": mail_html,
+            "o:tracking-clicks": "no",
+            "o:tracking-opens": "no",
+            "o:tracking": "no"
+        }
+    )
