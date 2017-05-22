@@ -97,6 +97,15 @@ class Computer(models.Model):
         return len(self.issues) == 0
 
     @property
+    def full_name(self):
+        full_name = self.name
+        description = self.status.get('description')
+        if description:
+            full_name = ' '.join([full_name, description])
+
+        return full_name
+
+    @property
     def issues(self):
         issues = []
         if self.get_ram_percentage() > RAM_DANGER:
