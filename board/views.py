@@ -115,7 +115,7 @@ def update_computer(request):
         if computer.not_ok_since is not None:
             interval = utc.localize(datetime.datetime.now()) - computer.not_ok_since
 
-        if not computer.is_ok() or (interval and interval > datetime.timedelta(minutes=59) and dest):
+        if interval and interval > datetime.timedelta(minutes=59) and dest:
             domain = os.getenv('MAILGUN_DOMAIN')
             api_key = os.getenv('MAILGUN_API_KEY')
 
