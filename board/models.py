@@ -5,9 +5,10 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
-DISK_DANGER = 90
-RAM_DANGER = 90
+PERCENTAGE_DANGER = 90
+PERCENTAGE_WARNING = 70
 TEMP_PROFILES_DANGER = 3
+TEMP_PROFILES_WARNING = 1
 
 
 class Computer(models.Model):
@@ -30,6 +31,9 @@ class Computer(models.Model):
         return self.get_sorted('registry')
 
     def get_sorted(self, tag):
+        """
+        From the status, returns a dictionary sorted by keys.
+        """
         reg = self.status.get(tag)
 
         if not reg:
@@ -41,36 +45,49 @@ class Computer(models.Model):
         else:
             return sorted(reg.items())
 
-    def get_ram_percentage(self):
-        value = self.status.get('os').get('ram')
+    def get_os_percentage(self, tag):
+        """
+        Get a percentage from the OS sub-section of the status.
+        For the moment, either 'disk' or 'ram'.
+        The subdictionary needs to have the following keys :
+        - total
+        - available
+        And the values must be integers and in the same unit.
+        :param tag: 'disk' or 'ram'
+        :return: the percentage of used over total.
+        """
+        value = self.status.get('os').get(tag)
         total = int(value.get('total'))
         available = int(value.get('available'))
         return int(((total - available) / total) * 100)
 
+    def get_ram_percentage(self):
+        return self.get_os_percentage('ram')
+
     def get_ram_color(self):
         percentage = self.get_ram_percentage()
-        if percentage >= RAM_DANGER:
+        if percentage >= PERCENTAGE_DANGER:
             return 'danger'
-        elif percentage >= 70:
+        elif percentage >= PERCENTAGE_WARNING:
             return 'warning'
         else:
             return 'success'
 
     @property
     def total_ram(self):
+        """
+        :return: The total size of RAM, in GB. 
+        """
         return int(int(self.status.get('os').get('ram').get('total')) / 1024 / 1000)
 
     def get_disk_percentage(self):
-        value = self.status.get('os').get('disk')
-        total = int(value.get('total'))
-        available = int(value.get('available'))
-        return int(((total - available) / total) * 100)
+        return self.get_os_percentage('disk')
 
     def get_disk_color(self):
         percentage = self.get_disk_percentage()
-        if percentage >= DISK_DANGER:
+        if percentage >= PERCENTAGE_DANGER:
             return 'danger'
-        elif percentage >= 70:
+        elif percentage >= PERCENTAGE_WARNING:
             return 'warning'
         else:
             return 'success'
@@ -81,13 +98,16 @@ class Computer(models.Model):
             return ''
         if temp >= TEMP_PROFILES_DANGER:
             return 'danger'
-        elif temp >= 1:
+        elif temp >= TEMP_PROFILES_WARNING:
             return 'warning'
         else:
             return 'success'
 
     @property
     def total_disk(self):
+        """
+        :return: The total size of disk, in GB. 
+        """
         return round(int(self.status.get('os').get('disk').get('total')) / 1000 / 1000 / 1000)
 
     def is_offline(self):
@@ -107,11 +127,17 @@ class Computer(models.Model):
 
     @property
     def issues(self):
+        """
+        List all the issues for the computer.
+        
+        :return: A list of dicts containing all the issues. The dicts always have the key "name" and may have a 
+        "reason". 
+        """
         issues = []
-        if self.get_ram_percentage() > RAM_DANGER:
+        if self.get_ram_percentage() > PERCENTAGE_DANGER:
             issues.append({'name': 'RAM overload'})
 
-        if self.get_disk_percentage() > DISK_DANGER:
+        if self.get_disk_percentage() > PERCENTAGE_DANGER:
             issues.append({'name': 'Disk overload'})
 
         status = self.status

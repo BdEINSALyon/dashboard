@@ -89,6 +89,12 @@ class ComputerListView(ListView):
 
 @csrf_exempt
 def update_computer(request):
+    """
+    Update a computer from the JSON given.
+    This sends mails if needed :
+    - If a computer has an issue for more than a hour
+    - If a computer is back to normal
+    """
     if request.method == 'POST':
         status = json.loads(request.body.decode("utf-8"))
         name = status['name']
