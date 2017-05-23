@@ -148,6 +148,7 @@ class Computer(models.Model):
         registry = status.get('registry')
         network = status.get('network')
         temp = status.get('os').get('temp_profiles')
+        office = status.get('office_activation')
 
         if not printer:
             issues.append({'name': 'Printer missing'})
@@ -190,6 +191,10 @@ class Computer(models.Model):
 
         if temp >= TEMP_PROFILES_DANGER:
             issues.append({'name': 'Too many temporary profiles'})
+
+        # We want to pop an error ONLY if not activated, no error if not reported yet.
+        if office == False:
+            issues.append({'name': 'Office is not activated'})
 
         return issues
 

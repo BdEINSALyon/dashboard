@@ -161,6 +161,10 @@
                                             <i class="fa fa-fw fa-print"></i> Imprimante MA
                                         </li>
 
+                                        <li class="text-white bg-{% if status.office_activation == False %}danger{% elif status.office_activation %}success{% else %}warning{% endif %}">
+                                            <i class="fa fa-fw fa-file-word-o"></i> Activation Office
+                                        </li>
+
                                         <li class="text-white bg-{% if computer.is_offline %}warning{% else %}success{% endif %}">
                                             <i class="fa fa-fw fa-calendar-check-o"></i>
                                             {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
