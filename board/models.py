@@ -5,8 +5,10 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
-PERCENTAGE_DANGER = 90
-PERCENTAGE_WARNING = 70
+DISK_GB_DANGER = 20
+DISK_GB_WARNING = 50
+RAM_MB_DANGER = 512
+RAM_MB_WARNING = 1024
 TEMP_PROFILES_DANGER = 3
 TEMP_PROFILES_WARNING = 1
 
@@ -45,6 +47,9 @@ class Computer(models.Model):
         else:
             return sorted(reg.items())
 
+    def get_os_available(self, tag):
+        return self.status.get('os').get(tag).get('available')
+
     def get_os_percentage(self, tag):
         """
         Get a percentage from the OS sub-section of the status.
@@ -65,10 +70,11 @@ class Computer(models.Model):
         return self.get_os_percentage('ram')
 
     def get_ram_color(self):
-        percentage = self.get_ram_percentage()
-        if percentage >= PERCENTAGE_DANGER:
+        available = self.get_os_available('ram') / 1024
+
+        if available <= RAM_MB_DANGER:
             return 'danger'
-        elif percentage >= PERCENTAGE_WARNING:
+        elif available <= RAM_MB_WARNING:
             return 'warning'
         else:
             return 'success'
@@ -78,16 +84,17 @@ class Computer(models.Model):
         """
         :return: The total size of RAM, in GB. 
         """
-        return int(int(self.status.get('os').get('ram').get('total')) / 1024 / 1000)
+        return int(int(self.status.get('os').get('ram').get('total')) / 1024 / 1024)
 
     def get_disk_percentage(self):
         return self.get_os_percentage('disk')
 
     def get_disk_color(self):
-        percentage = self.get_disk_percentage()
-        if percentage >= PERCENTAGE_DANGER:
+        available = round(int(self.get_os_available('disk')) / 1000 / 1000 / 1000)
+
+        if available <= DISK_GB_DANGER:
             return 'danger'
-        elif percentage >= PERCENTAGE_WARNING:
+        elif available <= DISK_GB_WARNING:
             return 'warning'
         else:
             return 'success'
@@ -134,10 +141,10 @@ class Computer(models.Model):
         "reason". 
         """
         issues = []
-        if self.get_ram_percentage() > PERCENTAGE_DANGER:
+        if self.get_ram_color() == 'danger':
             issues.append({'name': 'RAM overload'})
 
-        if self.get_disk_percentage() > PERCENTAGE_DANGER:
+        if self.get_disk_color() == 'danger':
             issues.append({'name': 'Disk overload'})
 
         status = self.status
