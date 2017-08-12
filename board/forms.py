@@ -22,4 +22,4 @@ class FiltersForm(forms.Form):
 
     status = forms.ChoiceField(choices=ON_OFFLINE_CHOICES, widget=forms.RadioSelect, label='En ligne')
     issues = forms.ChoiceField(choices=OK_ISSUES_CHOICES, widget=forms.RadioSelect, label='Problèmes')
-    apply = forms.BooleanField(required=False)
+    apply = forms.BooleanField(required=False, label='Appliquer')
