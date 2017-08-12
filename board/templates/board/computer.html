@@ -5,7 +5,7 @@
 {% load crispy_forms_field %}
 
 {% block meta %}
-    <meta http-equiv="refresh" content="60;">
+{#    <meta http-equiv="refresh" content="60;">#}
 {% endblock meta %}
 
 {% block body-js %}
@@ -56,8 +56,8 @@
         {% for computer in computers %}
             {% with status=computer.status %}
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="mb-3 card card-outline-{{ computer.get_color }}">
-                        <h6 class="card-header card-inverse bg-{{ computer.get_color }}">
+                    <div class="mb-3 card border-{{ computer.get_color }}">
+                        <h6 class="card-header text-white bg-{{ computer.get_color }}">
                             <i class="fa fa-desktop"></i> {{ computer.name }}
                             {% if status.description %}
                                 <small>{{ status.description }}</small>
