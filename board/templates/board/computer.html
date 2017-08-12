@@ -50,11 +50,11 @@
                     <form action="{% url 'board:computers' %}" id="filterForm" method="get">
                         {{ filters_form.media }}
                         {{ filters_form|crispy }}
-                        <input class="btn btn-primary" type="submit" value="Filtrer"/>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="{% url 'board:computers' %}" class="btn btn-warning">Réinitialiser</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                     <button type="submit" class="btn btn-primary" form="filterForm">Filtrer</button>
                 </div>
             </div>

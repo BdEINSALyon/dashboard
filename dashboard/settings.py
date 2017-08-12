@@ -151,7 +151,7 @@ STATICFILES_DIRS = (
     # 'static',
 )
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
