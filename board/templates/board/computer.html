@@ -5,7 +5,7 @@
 {% load crispy_forms_field %}
 
 {% block meta %}
-{#    <meta http-equiv="refresh" content="60;">#}
+    <meta http-equiv="refresh" content="60;">
 {% endblock meta %}
 
 {% block body-js %}
@@ -21,33 +21,43 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between my-3">
                 <div class="h1 d-inline m-0">
-                    Dashboard <small>{{ title }}</small>
+                    Dashboard
+                    <small>{{ title }}</small>
                     <span class="badge badge-default">{{ computers|length }}</span>
                 </div>
                 <div class="hidden-sm-down btn-group align-self-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#filterModal">
                             Filtres
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <form action="{% url 'board:computers' %}" method="get">
-                                {{ filters_form.media }}
-                                {{ filters_form|crispy }}
-                                <input class="btn btn-primary" type="submit" value="Filtrer"/>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row hidden-md-up mb-3">
-        <div class="col-sm-12">
-            <form action="{% url 'board:computers' %}" method="get">
-                {{ filters_form.media }}
-                {{ filters_form|crispy }}
-                <input class="btn btn-primary" type="submit" value="Filtrer"/>
-            </form>
+
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filtres</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'board:computers' %}" id="filterForm" method="get">
+                        {{ filters_form.media }}
+                        {{ filters_form|crispy }}
+                        <input class="btn btn-primary" type="submit" value="Filtrer"/>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="filterForm">Filtrer</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -172,7 +182,7 @@
 
                                         {% with prof=status.os.temp_profiles %}
                                             <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
-                                                <span class="badge badge-pill badge-default">{{ prof }}</span>
+                                                <span class="badge badge-pill badge-dark">{{ prof }}</span>
                                                 profil{% if prof > 1 %}s{% endif %}
                                                 temporaire{% if prof|length > 1 %}s{% endif %}
                                             </li>
@@ -183,7 +193,7 @@
                                                 {% if locked %}
                                                     <a data-toggle="collapse" href="#session-{{ computer.name }}">
                                                 {% endif %}
-                                                <span class="badge badge-pill badge-default">{{ locked|length }}</span>
+                                                <span class="badge badge-pill badge-dark">{{ locked|length }}</span>
                                                 session{% if locked|length > 1 %}s{% endif %}
                                                 verrouillée{% if locked|length > 1 %}s{% endif %}
                                                 {% if locked %}
@@ -201,7 +211,7 @@
                                             </li>
                                         {% endwith %}
                                         <li>
-                                            <span class="badge badge-pill badge-default">{{ status.os.total_sessions }}</span>
+                                            <span class="badge badge-pill badge-dark">{{ status.os.total_sessions }}</span>
                                             session{% if status.os.total_sessions > 1 %}s{% endif %}
                                             ouverte{% if status.os.total_sessions > 1 %}s{% endif %}
                                             au total
