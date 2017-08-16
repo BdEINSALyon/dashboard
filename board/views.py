@@ -1,4 +1,5 @@
 # Create your views here.
+import logging
 import os
 
 import pytz
@@ -16,6 +17,8 @@ import json
 
 from board.forms import FiltersForm
 from board.models import Computer
+
+log = logging.getLogger('dashboard')
 
 
 class ComputerListView(ListView):
@@ -107,6 +110,14 @@ def update_computer(request):
             except Computer.DoesNotExist:
                 computer = Computer(name=name)
         computer.status = status
+
+        # Retrieving client ip
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            client_ip = x_forwarded_for.split(',')[0]
+        else:
+            client_ip = request.META.get('REMOTE_ADDR')
+        log.info('Updating %s from %s', computer.name, client_ip)
 
         utc = pytz.utc
 
