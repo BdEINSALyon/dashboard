@@ -16,6 +16,7 @@ import datetime
 import json
 
 from board.forms import FiltersForm
+from board.logging import send_mail
 from board.models import Computer
 
 log = logging.getLogger('dashboard')
@@ -101,6 +102,10 @@ def update_computer(request):
     if request.method == 'POST':
         status = json.loads(request.body.decode("utf-8"))
         name = status['name']
+
+        client_ip = get_client_ip(request)
+        logged = False
+
         try:
             computer = Computer.objects.get(name=name)
         except Computer.DoesNotExist:
@@ -109,15 +114,12 @@ def update_computer(request):
                 computer.name = name
             except Computer.DoesNotExist:
                 computer = Computer(name=name)
+                log.warning('Created new computer %s from %s', name, client_ip)
+                logged = True
         computer.status = status
 
-        # Retrieving client ip
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            client_ip = x_forwarded_for.split(',')[0]
-        else:
-            client_ip = request.META.get('REMOTE_ADDR')
-        log.info('Updating %s from %s', computer.name, client_ip)
+        if not logged:
+            log.info('Updating %s from %s', computer.name, client_ip)
 
         utc = pytz.utc
 
@@ -163,20 +165,11 @@ def update_computer(request):
         return HttpResponse(status=400)
 
 
-def send_mail(subject, dest, mail_html):
-    domain = os.getenv('MAILGUN_DOMAIN')
-    api_key = os.getenv('MAILGUN_API_KEY')
-
-    requests.post(
-        "https://api.mailgun.net/v3/{0}/messages".format(domain),
-        auth=("api", api_key),
-        data={
-            "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
-            "to": dest.split(','),
-            "subject": subject,
-            "html": mail_html,
-            "o:tracking-clicks": "no",
-            "o:tracking-opens": "no",
-            "o:tracking": "no"
-        }
-    )
+def get_client_ip(request):
+    # Retrieving client ip
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(',')[0]
+    else:
+        client_ip = request.META.get('REMOTE_ADDR')
+    return client_ip

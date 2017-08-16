@@ -18,7 +18,6 @@ from django.contrib import messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -89,9 +88,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'dashboard.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
@@ -105,7 +102,6 @@ DATABASES = {
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -147,17 +143,20 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'log', 'dashboard.log'),
             'maxBytes': 100 * 1024,
             'backupCount': 10
+        },
+        'mailgun': {
+            'level': 'WARNING',
+            'class': 'board.logging.MailgunHandler',
         }
     },
     'loggers': {
         'dashboard': {
-            'handlers': ['console', 'rotating_file'],
+            'handlers': ['console', 'rotating_file', 'mailgun'],
             'level': 'INFO',
             'propagate': True
         }
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -171,7 +170,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -193,6 +191,5 @@ MESSAGE_TAGS = {
 GRAPHENE = {
     'SCHEMA': 'board.graphql.schema'
 }
-
 
 LOGIN_URL = '/auth/oauth/microsoft/login'
