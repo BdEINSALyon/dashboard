@@ -139,11 +139,19 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
             'stream': 'ext://sys.stdout'
+        },
+        'rotating_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(BASE_DIR, 'log', 'dashboard.log'),
+            'maxBytes': 100 * 1024,
+            'backupCount': 10
         }
     },
     'loggers': {
         'dashboard': {
-            'handlers': ['console'],
+            'handlers': ['console', 'rotating_file'],
             'level': 'INFO',
             'propagate': True
         }
