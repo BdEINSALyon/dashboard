@@ -20,7 +20,7 @@ class AzureGroup(models.Model):
         if token is None:
             return False
 
-        if datetime.datetime.now() > token.auth_token_expiration:
+        if timezone.now() > token.auth_token_expiration:
             from account.models import OAuthService
             ms = OAuthService.objects.filter(name='microsoft').first().provider
             ms.refresh_token(token)
