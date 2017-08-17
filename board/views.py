@@ -117,12 +117,12 @@ def update_computer(request):
                 computer.name = name
             except Computer.DoesNotExist:
                 computer = Computer(name=name)
-                log.warning('Created new computer %s from %s', name, client_ip)
+                log.warning('Created new computer %s from %s (%s)', name, client_ip, request.user)
                 logged = True
         computer.status = status
 
         if not logged:
-            log.info('Updating %s from %s', computer.name, client_ip)
+            log.info('Updating %s from %s (%s)', computer.name, client_ip, request.user)
 
         utc = pytz.utc
 
