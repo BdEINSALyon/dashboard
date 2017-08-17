@@ -18,6 +18,7 @@ MAILGUN_DOMAIN=MAILGUN-DOMAIN
 ```
 Dashboard - Monitor INSA Lyon Student Union (BdE INSA Lyon) computers.
 Copyright (C) 2017 Gabriel AUGENDRE
+Copyright (C) 2017 Pierre KUHNER
 Copyright (C) 2017 BdE INSA Lyon
 
 This program is free software: you can redistribute it and/or modify
