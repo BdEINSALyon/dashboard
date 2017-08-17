@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'account',
     'graphene_django',
     'crispy_forms',
+    'permissions',
 ]
 
 MIDDLEWARE = [
@@ -200,3 +201,4 @@ GRAPHENE = {
 }
 
 LOGIN_URL = '/auth/oauth/microsoft/login'
+AUTH_USER_MODEL = 'permissions.User'
