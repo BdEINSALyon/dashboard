@@ -101,6 +101,9 @@ def update_computer(request):
     """
     if request.method == 'POST':
         status = json.loads(request.body.decode("utf-8"))
+        if not validate_status(status):
+            return HttpResponse(status=400)
+
         name = status['name']
 
         client_ip = get_client_ip(request)
@@ -162,7 +165,7 @@ def update_computer(request):
 
         return HttpResponse(status=200)
     else:
-        return HttpResponse(status=400)
+        return HttpResponse(status=405)
 
 
 def get_client_ip(request):
@@ -173,3 +176,39 @@ def get_client_ip(request):
     else:
         client_ip = request.META.get('REMOTE_ADDR')
     return client_ip
+
+
+def validate_status(status):
+    required_keys = ['imprimante_ma', 'windows_activation', 'apps', 'tasks', 'registry', 'network', 'os',
+                     'office_activation', 'apps', 'description', 'name', 'network', 'tasks']
+    for k in required_keys:
+        if k not in status:
+            return False
+
+    required_keys = ['disk', 'ram', 'install_date', 'temp_profiles', 'total_sessions']
+    for k in required_keys:
+        if k not in status['os']:
+            return False
+
+    required_keys = ['dhcp', 'ip', 'mac']
+    for k in required_keys:
+        if k not in status['network']:
+            return False
+
+    required_keys = ['icon', 'installed', 'mandatory', 'name', 'verification']
+    for _, app in status['apps'].items():
+        for k in required_keys:
+            if k not in app:
+                return False
+
+    for _, task in status['tasks'].items():
+        for k in required_keys:
+            if k not in task:
+                return False
+
+    for _, reg in status['registry'].items():
+        for k in required_keys:
+            if k not in reg:
+                return False
+
+    return True
