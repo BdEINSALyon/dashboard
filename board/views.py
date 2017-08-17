@@ -179,36 +179,30 @@ def get_client_ip(request):
 
 
 def validate_status(status):
-    required_keys = ['imprimante_ma', 'windows_activation', 'apps', 'tasks', 'registry', 'network', 'os',
-                     'office_activation', 'apps', 'description', 'name', 'network', 'tasks']
-    for k in required_keys:
-        if k not in status:
-            return False
+    required_keys = {'imprimante_ma', 'windows_activation', 'apps', 'tasks', 'registry', 'network', 'os',
+                     'office_activation', 'apps', 'description', 'name', 'network', 'tasks'}
+    if not required_keys <= status.keys():
+        return False
 
-    required_keys = ['disk', 'ram', 'install_date', 'temp_profiles', 'total_sessions']
-    for k in required_keys:
-        if k not in status['os']:
-            return False
+    required_keys = {'disk', 'ram', 'install_date', 'temp_profiles', 'total_sessions'}
+    if not required_keys <= status['os'].keys():
+        return False
 
-    required_keys = ['dhcp', 'ip', 'mac']
-    for k in required_keys:
-        if k not in status['network']:
-            return False
+    required_keys = {'dhcp', 'ip', 'mac'}
+    if not required_keys <= status['network'].keys():
+        return False
 
-    required_keys = ['icon', 'installed', 'mandatory', 'name', 'verification']
+    required_keys = {'icon', 'installed', 'mandatory', 'name', 'verification'}
     for _, app in status['apps'].items():
-        for k in required_keys:
-            if k not in app:
-                return False
+        if not required_keys <= app.keys():
+            return False
 
     for _, task in status['tasks'].items():
-        for k in required_keys:
-            if k not in task:
-                return False
+        if not required_keys <= task.keys():
+            return False
 
     for _, reg in status['registry'].items():
-        for k in required_keys:
-            if k not in reg:
-                return False
+        if not required_keys <= reg.keys():
+            return False
 
     return True
