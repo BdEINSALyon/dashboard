@@ -159,12 +159,15 @@ LOGGING = {
     },
     'loggers': {
         'dashboard': {
-            'handlers': ['console', 'rotating_file', 'mailgun'],
+            'handlers': ['console', 'rotating_file'],
             'level': 'INFO',
             'propagate': True
         }
     }
 }
+
+if PROD:
+    LOGGING['loggers']['dashboard']['handlers'].append('mailgun')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
