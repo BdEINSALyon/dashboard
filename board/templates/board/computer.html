@@ -25,12 +25,11 @@
                     <small>{{ title }}</small>
                     <span class="badge badge-secondary">{{ computers|length }}</span>
                 </div>
-                <div class="hidden-sm-down btn-group align-self-center">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#filterModal">
-                            Filtres
-                        </button>
-                    </div>
+                <div class="align-self-center">
+                    <a class="btn btn-secondary" href="{% url 'admin:index' %}">Admin</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
+                        Filtres
+                    </button>
                 </div>
             </div>
         </div>
