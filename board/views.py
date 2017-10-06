@@ -100,13 +100,15 @@ def update_computer(request):
     - If a computer is back to normal
     """
     if request.method == 'POST':
+        client_ip = get_client_ip(request)
+        log.debug('Received POST request from %s', client_ip)
         status = json.loads(request.body.decode("utf-8"))
         if not validate_status(status):
+            log.warning('Invalid status received')
             return HttpResponse(status=400)
 
         name = status['name']
 
-        client_ip = get_client_ip(request)
         logged = False
 
         try:
