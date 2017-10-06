@@ -182,7 +182,7 @@ def get_client_ip(request):
 
 def validate_status(status):
     required_keys = {'imprimante_ma', 'windows_activation', 'apps', 'tasks', 'registry', 'network', 'os',
-                     'office_activation', 'apps', 'description', 'name', 'network', 'tasks'}
+                     'office_activation', 'description', 'name'}
     if not required_keys <= status.keys():
         log.warning('missing key(s) in status %s', required_keys - status.keys())
         return False
