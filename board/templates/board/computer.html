@@ -83,6 +83,13 @@
                                         <li>
                                             <i class="fa fa-fw fa-download"></i> {{ computer.install_date|date:'SHORT_DATETIME_FORMAT' }}
                                         </li>
+                                        {% if status.os.version %}
+                                            {% with version=status.os.version %}
+                                                <li>
+                                                    <i class="fa fa-fw fa-code-fork"></i> {{ version.major }}.{{ version.minor }}.{{ version.build }} {% if version.service_pack %}{{ version.service_pack }}{% endif %}
+                                                </li>
+                                            {% endwith %}
+                                        {% endif %}
                                     </ul>
                                 </li>
                                 <li><i class="fa fa-fw fa-calendar"></i> Tâches programmées
