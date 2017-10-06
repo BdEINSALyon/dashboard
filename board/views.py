@@ -184,27 +184,33 @@ def validate_status(status):
     required_keys = {'imprimante_ma', 'windows_activation', 'apps', 'tasks', 'registry', 'network', 'os',
                      'office_activation', 'apps', 'description', 'name', 'network', 'tasks'}
     if not required_keys <= status.keys():
+        log.warning('missing key(s) in status %s', required_keys - status.keys())
         return False
 
     required_keys = {'disk', 'ram', 'install_date', 'temp_profiles', 'total_sessions'}
     if not required_keys <= status['os'].keys():
+        log.warning('missing key(s) in status.os %s', required_keys - status['os'].keys())
         return False
 
     required_keys = {'dhcp', 'ip', 'mac'}
     if not required_keys <= status['network'].keys():
+        log.warning('missing key(s) in status.network %s', required_keys - status['network'].keys())
         return False
 
     required_keys = {'icon', 'installed', 'mandatory', 'name', 'verification'}
     for _, app in status['apps'].items():
         if not required_keys <= app.keys():
+            log.warning('missing key(s) in status.apps.%s %s', app, required_keys - app.keys())
             return False
 
     for _, task in status['tasks'].items():
         if not required_keys <= task.keys():
+            log.warning('missing key(s) in status.tasks.%s %s', task, required_keys - task.keys())
             return False
 
     for _, reg in status['registry'].items():
         if not required_keys <= reg.keys():
+            log.warning('missing key(s) in status.registry.%s %s', reg, required_keys - reg.keys())
             return False
 
     return True
