@@ -104,7 +104,7 @@ def update_computer(request):
         log.debug('Received POST request from %s', client_ip)
         status = json.loads(request.body.decode("utf-8"))
         if not validate_status(status):
-            log.warning('Invalid status received')
+            log.warning('Invalid status received from %s', client_ip)
             return HttpResponse(status=400)
 
         name = status['name']
