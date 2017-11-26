@@ -188,7 +188,7 @@
 
                                         <li>
                                             <i class="fa fa-fw fa-code-fork"></i>
-                                            {{ status.last_fetch|date:"SHORT_DATETIME_FORMAT" }}
+                                            {{ status.version|date:"SHORT_DATETIME_FORMAT" }}
                                         </li>
 
                                         {% with prof=status.os.temp_profiles %}
