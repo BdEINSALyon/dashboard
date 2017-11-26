@@ -86,7 +86,8 @@
                                         {% if status.os.version %}
                                             {% with version=status.os.version %}
                                                 <li>
-                                                    <i class="fa fa-fw fa-code-fork"></i> {{ version.major }}.{{ version.minor }}.{{ version.build }} {% if version.service_pack %}{{ version.service_pack }}{% endif %}
+                                                    <i class="fa fa-fw fa-code-fork"></i> {{ version.major }}.{{ version.minor }}.{{ version.build }}
+                                                    {% if version.service_pack %}{{ version.service_pack }}{% endif %}
                                                 </li>
                                             {% endwith %}
                                         {% endif %}
@@ -186,10 +187,14 @@
                                             {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                         </li>
 
-                                        <li>
-                                            <i class="fa fa-fw fa-code-fork"></i>
-                                            {{ status.version|date:"SHORT_DATETIME_FORMAT" }}
-                                        </li>
+                                        {% if status.version %}
+                                            <li>
+                                                <i class="fa fa-fw fa-code-fork"></i>
+                                                <a href="{{ status.version.html_url }}">
+                                                    {{ status.version.sha|slice:":7" }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
 
                                         {% with prof=status.os.temp_profiles %}
                                             <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
