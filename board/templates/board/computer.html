@@ -186,6 +186,11 @@
                                             {{ computer.last_update|date:"SHORT_DATETIME_FORMAT" }}
                                         </li>
 
+                                        <li>
+                                            <i class="fa fa-fw fa-code-fork"></i>
+                                            {{ status.last_fetch|date:"SHORT_DATETIME_FORMAT" }}
+                                        </li>
+
                                         {% with prof=status.os.temp_profiles %}
                                             <li class="{% if status.os.temp_profiles is not None %}text-white bg-{{ computer.get_temp_color }}{% endif %}">
                                                 <span class="badge badge-pill badge-dark">{{ prof }}</span>
