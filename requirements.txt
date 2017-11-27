@@ -12,7 +12,7 @@ gunicorn==19.6.0
 iso8601==0.1.11
 packaging==16.8
 promise==1.0.1
-psycopg2==2.6.2
+psycopg2==2.7.3.2
 pyparsing==2.1.10
 pytest-runner==2.11.1
 pytz==2016.10
