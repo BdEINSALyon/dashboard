@@ -249,6 +249,18 @@ class Verif(models.Model):
     display_name = models.CharField(max_length=200)
     mandatory = models.BooleanField(default=True)
     icon = models.CharField(max_length=50, blank=True)
+
+    ICON_TYPE_SOLID = 's'
+    ICON_TYPE_REGULAR = 'r'
+    ICON_TYPE_BRAND = 'b'
+
+    ICON_TYPES = (
+        (ICON_TYPE_SOLID, 'Solid (fas)'),
+        (ICON_TYPE_REGULAR, 'Regular (far)'),
+        (ICON_TYPE_BRAND, 'Brand (fab)'),
+    )
+    icon_type = models.CharField(max_length=2, choices=ICON_TYPES, default=ICON_TYPE_SOLID)
+
     type = models.ForeignKey(
         to=VerifType,
         on_delete=models.CASCADE,

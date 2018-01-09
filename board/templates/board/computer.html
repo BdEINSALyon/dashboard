@@ -101,7 +101,7 @@
                                                 title="{% if task.verification and task.verification.type == 'task' %}Tâche(s) : {{ task.verification.task_names|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if task.installed %}success{% elif task.mandatory %}danger{% else %}warning{% endif %}">
                                                 {% if task.icon %}
-                                                    <i class="fas fa-fw fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
+                                                    <i class="fa{{ task.icon_type }} fa-fw fa-{{ task.icon }}"></i> {% endif %}{{ task.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -114,7 +114,7 @@
                                                 title="{% if app.verification and app.verification.type == 'path' %}Chemin(s) : {{ app.verification.paths|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
                                                 {% if app.icon %}
-                                                    <i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
+                                                    <i class="fa{{ app.icon_type }} fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -127,7 +127,7 @@
                                                 title="{% if app.verification and app.verification.type == 'registry' %}Clé(s) : {{ app.verification.keys|join:', ' }}{% endif %}"
                                                 class="text-white bg-{% if app.installed %}success{% elif app.mandatory %}danger{% else %}warning{% endif %}">
                                                 {% if app.icon %}
-                                                    <i class="fa fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
+                                                    <i class="fa{{ app.icon_type }} fa-fw fa-{{ app.icon }}"></i> {% endif %}{{ app.name }}
                                             </li>
                                         {% endfor %}
                                     </ul>
