@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'crispy_forms',
     'permissions',
+    'jchart',
 ]
 
 MIDDLEWARE = [

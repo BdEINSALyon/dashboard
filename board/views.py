@@ -5,6 +5,7 @@ import os
 import pytz
 import requests
 from django.contrib.auth.decorators import login_required
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -15,11 +16,36 @@ import datetime
 
 import json
 
+from jchart import Chart
+from jchart.config import Axes, Tick, DataSet, rgba
+
 from board.forms import FiltersForm
 from board.logging import send_mail
 from board.models import Computer
 
 log = logging.getLogger('dashboard')
+
+
+class DiskChart(Chart):
+    chart_type = 'bar'
+    scales = {
+        'yAxes': [{'type': 'linear', 'ticks': {'min': 0, 'max': 100}}]
+    }
+
+    def __init__(self, queryset, height=None, width=None, html_id=None, json_encoder_class=DjangoJSONEncoder):
+        super().__init__(height, width, html_id, json_encoder_class)
+        self.queryset = queryset.order_by('name')
+
+    def get_datasets(self, *args, **kwargs):
+        return [DataSet(
+            label='Disk usage',
+            data=[computer.get_disk_percentage() for computer in self.queryset],
+            backgroundColor=[rgba(255, 0, 0, 0.2), rgba(0, 255, 0, 0.2)],
+            borderColor=[rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5)],
+        )]
+
+    def get_labels(self, *args, **kwargs):
+        return [computer.name for computer in self.queryset]
 
 
 class ComputerListView(ListView):
@@ -61,8 +87,9 @@ class ComputerListView(ListView):
             title = ' - '.join(title)
         else:
             title = 'Tout'
-
         context['title'] = title
+
+        context['disk_chart'] = DiskChart(self.get_queryset())
 
         return context
 
