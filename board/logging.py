@@ -2,6 +2,7 @@ import logging
 import os
 
 import requests
+from django.conf import settings
 from django.template.loader import get_template
 
 
@@ -23,7 +24,7 @@ def send_mail(subject, dest, mail_html):
         "https://api.mailgun.net/v3/{0}/messages".format(domain),
         auth=("api", api_key),
         data={
-            "from": "Dashboard <noreply@mg.bde-insa-lyon.fr>",
+            "from": "Dashboard <{}>".format(settings.SERVER_EMAIL),
             "to": dest.split(','),
             "subject": subject,
             "html": mail_html,

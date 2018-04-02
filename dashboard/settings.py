@@ -205,3 +205,5 @@ GRAPHENE = {
 
 LOGIN_URL = '/auth/oauth/microsoft/login'
 AUTH_USER_MODEL = 'permissions.User'
+
+SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'noreply@bde-insa-lyon.fr')
